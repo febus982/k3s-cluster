@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k3s-cluster-doc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k3s-cluster-docs
+  template:
+    metadata:
+      labels:
+        app: k3s-cluster-docs
+    spec:
+      containers:
+      - name: server
+        image: k3s-cluster-docs
+        ports:
+        - containerPort: 80
