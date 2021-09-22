@@ -1,0 +1,78 @@
+---
+all:
+  vars:
+    ansible_user: pi
+    consul_domain_suffix: "cluster"
+    lb_internal_floating_ip: "10.0.0.1"
+    lb_internal_interface: "eth0"
+    lb_external_floating_ip: "192.168.50.150"
+    lb_external_interface: "wlan0"
+  children:
+    k3s_cluster:
+    load_balancer:
+    raw_pi:
+
+k3s_cluster:
+  vars:
+    k3s_token: "sometokenvalue"
+    k3s_components:
+      coredns: yes
+      servicelb: no
+      traefik: no
+      local-storage: no
+      metrics-server: yes
+    ansible_ssh_common_args: "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ForwardAgent=yes -o ProxyCommand=\"ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -W %h:%p -q pi@{{ lb_external_floating_ip }}\""
+    flux_repository_owner: "febus982"
+    flux_repository_name: "flux-k3s-cluster"
+    flux_cluster_path: "clusters/k3s-pi"
+    github_personal_account: yes
+    github_personal_token: "<your-personal-token>"
+  children:
+    master:
+    node:
+
+master:
+  vars:
+    # Remove this if not using HA mode: https://rancher.com/docs/k3s/latest/en/installation/ha/
+    k3s_datastore_endpoint: 'http://192.168.50.100:2379'
+  hosts:
+    master1:
+      ansible_host: master1.local
+    master2:
+      ansible_host: master2.local
+
+node:
+  hosts:
+    node1:
+      ansible_host: node1.local
+    node2:
+      ansible_host: node2.local
+
+load_balancer:
+  vars:
+    k3s_external_nameserver: '10.0.2.0'
+    haproxy_k3s_redirects:
+      - name: k3s_ingress_gateway
+        target_gateway: 'ingress-gateway.busetti.io'
+        ports:
+          - 80
+          - 443
+  hosts:
+    lb1:
+      ansible_host: lb1.local
+      lb_priority: 100
+      internal_cidr: 10.0.0.2/16
+    lb2:
+      ansible_host: lb2.local
+      lb_priority: 99
+      internal_cidr: 10.0.0.3/16
+
+### Bootstrap inventory
+
+raw_pi:
+  vars:
+    ansible_ssh_common_args: "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ForwardAgent=yes {{ ('-o ProxyCommand=\"ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -W %h:%p -q pi@' + lb_external_floating_ip + '\"') if nested_pi is defined else '' }}"
+  hosts:
+    raspberrypi:
+      ansible_host: raspberrypi.local
+...

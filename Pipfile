@@ -7,6 +7,7 @@ name = "pypi"
 mkdocs = "*"
 mkdocs-material = "*"
 ansible = "*"
+pymdown-extensions = "*"
 
 [dev-packages]
 
@@ -16,3 +17,14 @@ python_version = "3"
 [scripts]
 docs = "mkdocs serve"
 build_docs = "mkdocs build"
+
+ansible-requirements = "ansible-galaxy install -f -r galaxy-requirements.yml"
+lb_bootstrap_pi = "ansible-playbook playbooks/bootstrap_new_pi.yml -i inventory/inventory.yml"
+lb_install = "ansible-playbook playbooks/load_balancer/install.yml -i inventory/inventory.yml"
+lb_shutdown = "ansible-playbook playbooks/load_balancer/shutdown_nodes.yml -i inventory/inventory.yml"
+k3s_bootstrap = "ansible-playbook playbooks/bootstrap_new_pi.yml -i inventory/inventory.yml -e nested_pi=true"
+k3s_install = "ansible-playbook playbooks/k3s_cluster/install.yml -i inventory/inventory.yml"
+k3s_shutdown = "ansible-playbook playbooks/k3s_cluster/shutdown_nodes.yml -i inventory/inventory.yml"
+k3s_uninstall = "ansible-playbook playbooks/k3s_cluster/uninstall.yml -i inventory/inventory.yml"
+k3s_apps = "ansible-playbook playbooks/k3s_cluster/apps.yml -i inventory/inventory.yml"
+pi_setup = "ansible-playbook raspberry_bootstrap.yml -i inventory/inventory.yml"
