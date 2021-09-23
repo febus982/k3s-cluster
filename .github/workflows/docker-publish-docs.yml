@@ -28,18 +28,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up Python 3.7.
+      - name: Set up Python 3
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
 
-      - name: Install pipenv.
-        run: pip3 install yamllint ansible-lint ansible
+      - name: Install pipenv
+        run: pip3 pipenv
 
-      - name: Install dependencies.
+      - name: Install dependencies
         run: pipenv install --deploy --ignore-pipfile
 
-      - name: Install dependencies.
+      - name: Build docs
         run: pipenv run build_docs
 
       - name: Set up QEMU
