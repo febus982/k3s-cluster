@@ -1,0 +1,64 @@
+- name: Enable IPv4 forwarding
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: "1"
+    state: present
+    reload: yes
+  become: yes
+
+- name: Enable IPv6 forwarding
+  sysctl:
+    name: net.ipv6.conf.all.forwarding
+    value: "1"
+    state: present
+    reload: yes
+  become: yes
+
+- name: Verify IPv4 forwarding is enabled
+  command: cat /proc/sys/net/ipv4/ip_forward
+  register: ipv4_forward_command
+  failed_when: ipv4_forward_command.stdout != '1'
+
+- name: Verify IPv6 forwarding is enabled
+  command: cat /proc/sys/net/ipv6/conf/all/forwarding
+  register: ipv6_forward_command
+  failed_when: ipv6_forward_command.stdout != '1'
+
+- name: Enable IPv4 arp filtering
+  sysctl:
+    name: net.ipv4.conf.all.arp_filter
+    value: "1"
+    state: present
+    reload: yes
+  become: yes
+
+- name: Activating cgroup support
+  lineinfile:
+    path: /boot/cmdline.txt
+    regexp: '^((?!.*\bcgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory\b).*)$'
+    line: '\1 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory'
+    backrefs: true
+  become: yes
+
+- name: Flush iptables before changing to iptables-legacy
+  iptables:
+    flush: true
+  become: yes
+
+- name: Changing to iptables-legacy
+  alternatives:
+    path: /usr/sbin/iptables-legacy
+    name: iptables
+  register: ip4_legacy
+  become: yes
+
+- name: Changing to ip6tables-legacy
+  alternatives:
+    path: /usr/sbin/ip6tables-legacy
+    name: ip6tables
+  register: ip6_legacy
+  become: yes
+
+- name: Reboot machine
+  reboot:
+  become: true

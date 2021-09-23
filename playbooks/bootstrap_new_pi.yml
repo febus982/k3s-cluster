@@ -1,0 +1,18 @@
+---
+- hosts: raw_pi
+  become: yes
+  tasks:
+    - name: Set hostname
+      shell:
+        cmd: "raspi-config nonint do_hostname {{ new_hostname }}"
+    - name: Set timezone
+      shell:
+        cmd: "raspi-config nonint do_change_timezone Etc/UTC"
+    - name: Expand filesystem
+      shell:
+        cmd: "raspi-config nonint do_expand_rootfs"
+    - name: Reboot
+      reboot:
+        reboot_timeout: 5
+      ignore_errors: yes
+...

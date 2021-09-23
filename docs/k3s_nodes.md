@@ -2,11 +2,17 @@
 
 ## PI Network setup
 
-Same as we did for load balancers we setup these on one PI at a time. The PIs have to be connected
+Same as we did for load balancers we setup one PI at a time. The PIs have to be connected to the ethernet interface so
+that they will receive an IP address from the load balancers.
 
-- Start the PI, it will become available on `raspberrypi.local` hostname
-- `ssh-copy-id -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -W %h:%p -q pi@192.168.50.150" pi@raspberrypi.local` (default pi user password is `raspberry`)
-- Run `pipenv run k3s_bootstrap -e new_hostname=master1`
+Start the PI, it will become available on `raspberrypi.local` hostname
+```
+ssh-copy-id -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+ -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -W %h:%p -q pi@192.168.50.150" \
+ pi@raspberrypi.local
+
+pipenv run k3s_bootstrap -e new_hostname=master1
+```
 
 Repeat the same for `master2` and all nodes defined in the ansible inventory
 

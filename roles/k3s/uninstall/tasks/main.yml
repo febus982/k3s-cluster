@@ -1,0 +1,21 @@
+---
+- name: Uninstall K3S Master
+  shell:
+    cmd: "/usr/local/bin/k3s-uninstall.sh"
+  when: master
+
+- name: Uninstall K3S Agent
+  shell:
+    cmd: "/usr/local/bin/k3s-agent-uninstall.sh"
+  when: not master
+
+- name: Remove .kube directory
+  file:
+    path: ~{{ ansible_user }}/.kube
+    state: absent
+
+- name: Remove custom k3s config
+  file:
+    path: /etc/rancher
+    state: absent
+...

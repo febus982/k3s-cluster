@@ -1,0 +1,20 @@
+---
+- name: Download flux cli
+  ansible.builtin.unarchive:
+    src: "https://github.com/fluxcd/flux2/releases/download/v0.17.1/flux_0.17.1_linux_arm.tar.gz"
+    dest: ~{{ ansible_user }}
+    remote_src: yes
+  become: yes
+
+- name: Bootstrap fluxcd
+  ansible.builtin.command:
+    cmd: >
+      ~{{ ansible_user }}/flux bootstrap github
+      --kubeconfig /etc/rancher/k3s/k3s.yaml
+      --owner={{ flux.repository_owner }}
+      --repository={{ flux.repository_name }}
+      --path={{ flux.cluster_path }}
+      {{ '--personal' if flux.github_personal_account else '' }}
+  environment:
+    GITHUB_TOKEN: "{{ flux.github_personal_token }}"
+...

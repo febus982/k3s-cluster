@@ -1,0 +1,19 @@
+---
+- hosts: node
+  gather_facts: yes
+  become: no
+  roles:
+    - role: k3s/uninstall
+      vars:
+        master: no
+      become: yes
+
+- hosts: master
+  gather_facts: yes
+  become: no
+  roles:
+    - role: k3s/uninstall
+      vars:
+        master: yes
+      become: yes
+...

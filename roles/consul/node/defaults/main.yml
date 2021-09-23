@@ -1,0 +1,8 @@
+---
+consul_master: no
+consul_version: "1.10.2"
+consul_domain_suffix: "cluster"
+consul_arch_map:
+  aarch64: "arm64"
+  armv7l: "armhfv6"
+...
