@@ -34,7 +34,7 @@ jobs:
           python-version: '3.x'
 
       - name: Install pipenv
-        run: pip3 pipenv
+        run: pip3 install pipenv
 
       - name: Install dependencies
         run: pipenv install --deploy --ignore-pipfile
