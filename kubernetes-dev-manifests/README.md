@@ -1,0 +1,1 @@
+# The manifests in this directory are used only for local testing using minikube

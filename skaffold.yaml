@@ -1,3 +1,4 @@
+# NOTE: THIS IS ONLY USED FOR LOCAL TESTING USING MINIKUBE
 # To learn more about the skaffold.yaml schema visit
 # https://skaffold.dev/docs/references/yaml/
 apiVersion: skaffold/v2beta22
@@ -13,9 +14,4 @@ build:
 deploy:
   kubectl:
     manifests:
-    - kubernetes-manifests/**
-# use the cloudbuild profile to build images using Google Cloud Build
-profiles:
-- name: cloudbuild
-  build:
-    googleCloudBuild: {}
+    - kubernetes-dev-manifests/**
