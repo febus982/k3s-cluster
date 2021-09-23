@@ -2,7 +2,6 @@
 all:
   vars:
     ansible_user: pi
-    consul_domain_suffix: "cluster"
     lb_internal_floating_ip: "10.0.0.1"
     lb_internal_interface: "eth0"
     lb_external_floating_ip: "192.168.50.150"
@@ -14,19 +13,21 @@ all:
 
 k3s_cluster:
   vars:
-    k3s_token: "sometokenvalue"
+    ansible_ssh_common_args: "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ForwardAgent=yes -o ProxyCommand=\"ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -W %h:%p -q pi@{{ lb_external_floating_ip }}\""
+    k3s_token: "somesecrettoken"
     k3s_components:
       coredns: yes
       servicelb: no
       traefik: no
-      local-storage: no
+      local-storage: yes
       metrics-server: yes
-    ansible_ssh_common_args: "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ForwardAgent=yes -o ProxyCommand=\"ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -W %h:%p -q pi@{{ lb_external_floating_ip }}\""
-    flux_repository_owner: "febus982"
-    flux_repository_name: "flux-k3s-cluster"
-    flux_cluster_path: "clusters/k3s-pi"
-    github_personal_account: yes
-    github_personal_token: "<your-personal-token>"
+    flux:
+      enabled: no
+      repository_owner: "febus982"
+      repository_name: "k3s-flux-sample"
+      cluster_path: "clusters/k3s-pi"
+      github_personal_account: yes
+      github_personal_token: "<personal_token>"
   children:
     master:
     node:
