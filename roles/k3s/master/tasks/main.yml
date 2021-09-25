@@ -9,10 +9,29 @@
     src: "{{ role_path }}/templates/config.yaml.j2"
     dest: /etc/rancher/k3s/config.yaml
 
-- name: Install K3S Master
+- name: Check if HA mode with integrated datastor
+  set_fact:
+    ha_integrated_datastore: groups['master'] | length | int > 1 and k3s_datastore_endpoint is not defined
+
+- name: Get first master hostname
+  set_fact:
+    first_master_hostname: "{{ hostvars[groups['master'][0]]['ansible_host'] }}"
+
+- name: Install K3S Master (Single master or no integrated datastore)
   shell:
     cmd: "curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC=server sh -"
     creates: /etc/rancher/k3s/k3s.yaml
+  when: not ha_integrated_datastore
+
+- name: Install K3S Master (Integrated datastore mode)
+  shell:
+    cmd: >
+      curl -sfL https://get.k3s.io |
+      {{ 'K3S_CLUSTER_INIT=true' if ansible_host == first_master_hostname else 'K3S_URL=https://' + first_master_hostname + ':6443' }}
+      INSTALL_K3S_EXEC=server
+      sh -
+    creates: /etc/rancher/k3s/k3s.yaml
+  when: ha_integrated_datastore
 
 - name: Wait for K3S config
   wait_for:
