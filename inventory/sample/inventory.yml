@@ -14,8 +14,8 @@ all:
 k3s_cluster:
   vars:
     ansible_ssh_common_args: "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ForwardAgent=yes -o ProxyCommand=\"ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -W %h:%p -q pi@{{ lb_external_floating_ip }}\""
-    # Remove datastore if not using HA mode: https://rancher.com/docs/k3s/latest/en/installation/ha/
-    k3s_datastore_endpoint: 'http://192.168.50.100:2379'
+    # Enable if using external datastore HA: https://rancher.com/docs/k3s/latest/en/installation/ha/
+#    k3s_datastore_endpoint: 'http://192.168.50.100:2379'
     k3s_token: "somesecrettoken"
     k3s_components:
       coredns: yes
@@ -42,13 +42,13 @@ master:
       ansible_host: master1.local
     master2:
       ansible_host: master2.local
+    master3:
+      ansible_host: master3.local
 
 node:
   hosts:
     node1:
       ansible_host: node1.local
-    node2:
-      ansible_host: node2.local
 
 load_balancer:
   vars:
