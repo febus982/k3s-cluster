@@ -25,6 +25,7 @@ k3s_cluster:
       metrics-server: yes
     flux:
       enabled: no
+      version: "0.17.2"
       repository_owner: "febus982"
       repository_name: "k3s-flux-sample"
       cluster_path: "clusters/k3s-pi"

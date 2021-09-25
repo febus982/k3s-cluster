@@ -1,7 +1,7 @@
 ---
 - name: Download flux cli
   ansible.builtin.unarchive:
-    src: "https://github.com/fluxcd/flux2/releases/download/v0.17.1/flux_0.17.1_linux_arm.tar.gz"
+    src: "https://github.com/fluxcd/flux2/releases/download/v{{ flux.version }}/flux_{{ flux.version }}_linux_arm.tar.gz"
     dest: ~{{ ansible_user }}
     remote_src: yes
   become: yes
