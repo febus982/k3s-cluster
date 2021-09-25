@@ -21,7 +21,7 @@ then:
 pipenv run k3s_bootstrap -e new_hostname=master1
 ```
 
-Repeat the same all nodes defined in the ansible inventory
+Repeat the same for all the nodes defined in the ansible inventory, with the proper hostname.
 
 Note: The `ssh-copy-id` command has additional options from the ones in the load balancer setup.
 

@@ -16,7 +16,7 @@ For the sake of installing the system the default settings found on Raspberry Pi
 
 Download the `arm64` version of Raspberry Pi OS [here](https://downloads.raspberrypi.org/raspios_lite_arm64/images/).
 
-For each Raspberry PI card (you can setup all cards at the same time)
+For each Raspberry PI card
 
 - Install the downloaded image to the SD card using [Raspberry Pi Imager](https://www.raspberrypi.org/software/)
 - Create empty file named `ssh` in the SD card boot partition
@@ -24,7 +24,7 @@ For each Raspberry PI card (you can setup all cards at the same time)
 
 Only for the Load Balancer SD cards:
 
-- Create a `wpa_supplicant.conf` file in the SD card to automatically connect to the WiFi network already on the first
+- Create a `wpa_supplicant.conf` file in the SD card to automatically connect to the Wi-Fi network already on the first
 boot, with the following content:
 
 ```
