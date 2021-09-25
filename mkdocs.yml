@@ -3,11 +3,10 @@ repo_url: https://github.com/febus982/k3s-cluster
 repo_name: febus982/k3s-cluster
 nav:
   - Home: index.md
-  - Networking design: networking.md
-  - Raspberry initial setup: initial_setup.md
-  - Load balancers: load_balancers.md
-  - K3S nodes: k3s_nodes.md
-  - Ansible inventory: inventory.md
+  - Network design: network.md
+  - Initial setup: initial_setup.md
+  - Load balancers setup: load_balancers.md
+  - K3S nodes setup: k3s_nodes.md
 
 markdown_extensions:
   - pymdownx.snippets

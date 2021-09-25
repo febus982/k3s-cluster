@@ -2,15 +2,23 @@
 
 If you don't already have a SSH key please [create a new ssh key pair](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent?utm_source=Blog#generating-a-new-ssh-key)
 
-## SD Cards
+## Note about security
+
+This documentation doesn't cover security practices like:
+
+- Changing the default `pi` user password
+- Creating a different user than `pi`
+- Changing SSH daemon port
+
+For the sake of installing the system the default settings found on Raspberry Pi OS are used. 
+
+## Raspberry PIs SD Cards
 
 Download the `arm64` version of Raspberry Pi OS [here](https://downloads.raspberrypi.org/raspios_lite_arm64/images/).
-You can also install the normal 32 bit version with architecture `armv7` but the `arm64` architecture is
-much more supported for docker images.
 
-For each LB pi card (you can setup all cards at the same time)
+For each Raspberry PI card (you can setup all cards at the same time)
 
-- Install the downloaded image to the SD card using Raspberry Pi Imager (https://www.raspberrypi.org/software/)
+- Install the downloaded image to the SD card using [Raspberry Pi Imager](https://www.raspberrypi.org/software/)
 - Create empty file named `ssh` in the SD card boot partition
 - Optional: modify the `config.txt` file in the sd card and customise the PI config (e.g. Disable the bluetooth adapter)
 
@@ -28,4 +36,16 @@ network={
  ssid="<YOUR_SSID_HERE>"
  psk="<YOUR_PASSWORD_HERE>"
 }
+```
+
+## Setup ansible inventory
+
+Copy the sample inventory and customise it, if necessary:
+
+```bash
+cp ./inventory/sample/inventory.yml ./inventory/inventory.yml
+```
+
+```yaml
+--8<-- "./inventory/sample/inventory.yml"
 ```

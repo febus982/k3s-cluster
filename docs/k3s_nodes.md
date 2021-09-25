@@ -1,22 +1,29 @@
 # K3S Nodes PI setup
 
+This requires the Load Balancer PIs to be installed and running. Refer to [Load balancers setup](load_balancers.md).
+
 ## PI Network setup
 
-Same as we did for load balancers we setup one PI at a time. The PIs have to be connected to the ethernet interface so
+Same as we did for load balancers we turn on one PI at a time. The PIs have to be connected to the ethernet interface so
 that they will receive an IP address from the load balancers.
 
-Start the PI, it will become available on `raspberrypi.local` hostname
-```
+Start the PI, it will become available on `raspberrypi.local` hostname. Run:
+
+```bash
 ssh-copy-id -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
  -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -W %h:%p -q pi@192.168.50.150" \
  pi@raspberrypi.local
+```
 
+then:
+
+```bash
 pipenv run k3s_bootstrap -e new_hostname=master1
 ```
 
-Repeat the same for `master2` and all nodes defined in the ansible inventory
+Repeat the same all nodes defined in the ansible inventory
 
-Note: The `ssh-copy-id` command has different options from the ones in the load balancer setup.
+Note: The `ssh-copy-id` command has additional options from the ones in the load balancer setup.
 
 ## K3S Nodes PIs provisioning
 

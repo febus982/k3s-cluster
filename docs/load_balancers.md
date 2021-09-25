@@ -4,11 +4,15 @@
 
 We need to do these operations by turning on one PI at a time, otherwise the `raspberrypi.local` name will collide.
 
-Start the first PI, it will become available on `raspberrypi.local` hostname (default pi user password is `raspberry`)
+Start the first PI, it will become available on `raspberrypi.local` hostname (default pi user password is `raspberry`). Run:
 
 ```bash
 ssh-copy-id -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null pi@raspberrypi.local
+```
 
+then:
+
+```bash
 pipenv run lb_bootstrap_pi -e new_hostname=lb1
 ```
 
