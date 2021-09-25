@@ -1,7 +1,7 @@
 - name: Fail if master setup is invalid
   fail:
-    msg: You can't run an HA setup with only 2 masters without an external datastore
-  when: "{{ (groups['master'] | length) == 2 and k3s_datastore_endpoint is not defined }}"
+    msg: You can't run an an even number of masters without an external datastore
+  when: (groups['master'] | length | int is divisibleby 2) and k3s_datastore_endpoint is not defined
 
 - name: Enable IPv4 forwarding
   sysctl:
