@@ -3,11 +3,6 @@ resolvers consul
    accepted_payload_size 8192
    hold valid 5s
 
-resolvers k3s
-   nameserver k3s {{ k3s_external_nameserver }}:53
-   accepted_payload_size 8192
-   hold valid 5s
-
 frontend stats
     bind *:1936
     mode http
@@ -30,6 +25,6 @@ frontend f_{{ redirect['name'] }}_{{ port }}
     default_backend b_{{ redirect['name'] }}_{{ port }}
 
 backend b_{{ redirect['name'] }}_{{ port }}
-    server k3s-ingress {{ redirect['target_gateway'] }}:{{ port }} check resolvers k3s resolve-prefer ipv4
+    server {{ redirect['name'] }} {{ redirect['target_ip'] }}:{{ port }} check init-addr none
 {% endfor  %}
 {% endfor  %}

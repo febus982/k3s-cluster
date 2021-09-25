@@ -2,6 +2,7 @@
 all:
   vars:
     ansible_user: pi
+    # Floating IP configuration
     lb_internal_floating_ip: "10.0.0.1"
     lb_internal_interface: "eth0"
     lb_external_floating_ip: "192.168.50.150"
@@ -13,56 +14,66 @@ all:
 
 k3s_cluster:
   vars:
+    # We avoid persisting the SSH host fingerprint to avoid errors caused by the floating IP
+    # Jumping between the different Load Balancer Raspberry PIs
     ansible_ssh_common_args: "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ForwardAgent=yes -o ProxyCommand=\"ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -W %h:%p -q pi@{{ lb_external_floating_ip }}\""
+    # Uncomment to use external datastore HA: https://rancher.com/docs/k3s/latest/en/installation/ha/
+#    k3s_datastore_endpoint: 'http://192.168.50.100:2379'
     k3s_token: "somesecrettoken"
+    # K3S components: https://rancher.com/docs/k3s/latest/en/installation/install-options/server-config/#kubernetes-components
     k3s_components:
       coredns: yes
-      servicelb: no
-      traefik: no
+      servicelb: no # We'll use MetalLB to assigne IP addresses to LoadBalancer services
+      traefik: no # We'll use nginx-ingress, to maintain control over the installation options (assign the correct IP address to the service)
       local-storage: yes
       metrics-server: yes
+    # We use FluxCD to deploy the other components: https://fluxcd.io/docs/
     flux:
-      enabled: no
+      enabled: yes
+      version: "0.17.2"
       repository_owner: "febus982"
       repository_name: "k3s-flux-sample"
       cluster_path: "clusters/k3s-pi"
-      github_personal_account: yes
-      github_personal_token: "<personal_token>"
+      github_personal_account: yes # If the owner is a GitHub Organisation set this to `no`
+      github_personal_token: "<personal_token>" # A personal token is necessary for flux to interact with the repository
   children:
     master:
     node:
 
 master:
-  vars:
-    # Remove this if not using HA mode: https://rancher.com/docs/k3s/latest/en/installation/ha/
-    k3s_datastore_endpoint: 'http://192.168.50.100:2379'
+  # Uncomment to add node taints to the master nodes
+#  vars:
+#    node_taint: "CriticalAddonsOnly=true:NoExecute"
   hosts:
+  # List of master node Raspberry PIs and hostnames
     master1:
       ansible_host: master1.local
     master2:
       ansible_host: master2.local
+    master3:
+      ansible_host: master3.local
 
 node:
   hosts:
+    # List of non-master node Raspberry PIs and hostnames
     node1:
       ansible_host: node1.local
-    node2:
-      ansible_host: node2.local
 
 load_balancer:
   vars:
-    k3s_external_nameserver: '10.0.2.0'
+    # List of ports and destination IP that Load Balancer forward to internal network
     haproxy_k3s_redirects:
       - name: k3s_ingress_gateway
-        target_gateway: 'ingress-gateway.busetti.io'
+        target_ip: '10.0.1.1'
         ports:
           - 80
           - 443
   hosts:
+    # List of Load Balancer Raspberry PIs
     lb1:
       ansible_host: lb1.local
-      lb_priority: 100
-      internal_cidr: 10.0.0.2/16
+      lb_priority: 100 # Priority for Floating IP assignation
+      internal_cidr: 10.0.0.2/16 # We need a static IP configuration
     lb2:
       ansible_host: lb2.local
       lb_priority: 99
@@ -71,6 +82,8 @@ load_balancer:
 ### Bootstrap inventory
 
 raw_pi:
+  # We avoid persisting the SSH host fingerprint because the `raspberrypi.local` hostname
+  # is assigned to all Raspberry PIs as default and it would cause errors
   vars:
     ansible_ssh_common_args: "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ForwardAgent=yes {{ ('-o ProxyCommand=\"ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -W %h:%p -q pi@' + lb_external_floating_ip + '\"') if nested_pi is defined else '' }}"
   hosts:

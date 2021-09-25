@@ -4,21 +4,29 @@
 
 We need to do these operations by turning on one PI at a time, otherwise the `raspberrypi.local` name will collide.
 
-Start the first PI, it will become available on `raspberrypi.local` hostname (default pi user password is `raspberry`)
+Start the first PI, it will become available on `raspberrypi.local` hostname (default pi user password is `raspberry`). Run:
 
 ```bash
 ssh-copy-id -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null pi@raspberrypi.local
+```
 
+then:
+
+```bash
 pipenv run lb_bootstrap_pi -e new_hostname=lb1
 ```
 
 Note that the reboot task will fail, this is expected because the hostname will be changed to `lb1.local`.
 
-Start the second PI, and run these command
+Start the second PI, and run:
 
 ```bash
 ssh-copy-id -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null pi@raspberrypi.local
+```
 
+then:
+
+```bash
 pipenv run lb_bootstrap_pi -e new_hostname=lb2
 ```
 
@@ -27,9 +35,14 @@ Now the PIs are available using `lb1.local` and `lb2.local` hostnames
 ## Load Balancer PIs provisioning
 
 Run:
+
 ```bash
 pipenv run ansible-requirements
+```
 
+then:
+
+```bash
 pipenv run lb_install
 ```
 
@@ -40,7 +53,7 @@ pipenv run lb_install
 
 ## Applications
 
-You should be able to access the following addresses:
+We have two applications we can use to monitor the status of the Raspberry PIs connected to the internal network:
 
-- http://192.168.50.150:8500 - Consul UI
-- http://192.168.50.150:1936/stats - Haproxy statistics
+- Consul, to monitor hardware PIs health, accessible at [http://192.168.50.150:8500](http://192.168.50.150:8500)
+- Haproxy statistics, accessible at [http://192.168.50.150:1936/stats](http://192.168.50.150:1936/stats)

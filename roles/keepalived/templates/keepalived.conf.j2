@@ -4,6 +4,14 @@ vrrp_script chk_haproxy {
         weight 2                        # add 2 points of prio if OK
 }
 
+vrrp_sync_group VG1 {
+   group {
+      IN_1
+      EX_1
+   }
+}
+
+
 vrrp_instance IN_1 {
         interface {{ internal_interface }}
         state BACKUP

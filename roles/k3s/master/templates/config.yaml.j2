@@ -13,5 +13,7 @@ disable:
   {{ "- local-storage" if not k3s_components['local-storage'] else "" }}
   {{ "- servicelb" if not k3s_components['servicelb'] else "" }}
   {{ "- coredns" if not k3s_components['coredns'] else "" }}
-node-taint: "CriticalAddonsOnly=true:NoExecute"
+{% if node_taint is defined %}
+node-taint: "{{ node_taint }}"
+{% endif %}
 ...
