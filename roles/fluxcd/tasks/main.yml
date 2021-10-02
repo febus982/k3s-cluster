@@ -11,6 +11,7 @@
     cmd: >
       ~{{ ansible_user }}/flux bootstrap github
       --kubeconfig /etc/rancher/k3s/k3s.yaml
+      --components-extra=image-reflector-controller,image-automation-controller
       --owner={{ flux.repository_owner }}
       --repository={{ flux.repository_name }}
       --path={{ flux.cluster_path }}
