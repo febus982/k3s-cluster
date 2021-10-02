@@ -1,5 +1,5 @@
-resolvers consul
-   nameserver consul 127.0.0.1:8600
+resolvers local
+   nameserver local 127.0.0.1:53
    accepted_payload_size 8192
    hold valid 5s
 
@@ -10,21 +10,19 @@ frontend stats
     stats enable
     stats refresh 10s
     no log
-
-frontend f_k3s_api_endpoint
-    bind *:6443
-    default_backend b_k3s_api_endpoint
-
-backend b_k3s_api_endpoint
-    server-template master {{ k3s_masters_amount }} _k3s_master._tcp.service.{{ consul_domain_suffix }}:6443 resolvers consul resolve-prefer ipv4 resolve-opts allow-dup-ip check
-
 {% for redirect in haproxy_k3s_redirects %}
 {% for port in redirect['ports'] %}
+
 frontend f_{{ redirect['name'] }}_{{ port }}
     bind *:{{ port }}
     default_backend b_{{ redirect['name'] }}_{{ port }}
 
 backend b_{{ redirect['name'] }}_{{ port }}
-    server {{ redirect['name'] }} {{ redirect['target_ip'] }}:{{ port }} check init-addr none
-{% endfor  %}
-{% endfor  %}
+{% if redirect['target_ips'] is defined %}{% for ip in redirect['target_ips'] %}
+    server {{ ip }} {{ ip }}:{{ port }} check init-addr none
+{% endfor  %}{% endif %}
+{% if redirect['target_hostnames'] is defined %}{% for host in redirect['target_hostnames'] %}
+    server {{ host }} {{ host }}:{{ port }} check resolvers local resolve-prefer ipv4 init-addr none
+{% endfor  %}{% endif %}
+{% endfor  %}{# End port cycle #}
+{% endfor  %}{# End redirect cycle #}

@@ -63,11 +63,20 @@ load_balancer:
   vars:
     # List of ports and destination IP that Load Balancer forward to internal network
     haproxy_k3s_redirects:
+      - name: k3s_api
+        target_hostnames:
+          - 'master1.local'
+          - 'master2.local'
+          - 'master3.local'
+        ports:
+          - 6443
       - name: k3s_ingress_gateway
-        target_ip: '10.0.1.1'
+        target_ips:
+          - '10.0.1.1'
         ports:
           - 80
           - 443
+
   hosts:
     # List of Load Balancer Raspberry PIs
     lb1:
