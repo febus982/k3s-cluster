@@ -1,21 +1,31 @@
 # Network design
 
-The system is designed to create and use an isolated subnet.
+The system is designed to create and use an isolated subnet, providing service discovery and routing to the external network.
+
+Example configuration:
 
 ``` mermaid
-graph LR
-    LAN([WiFi])
-    LB1{{LB1}}
-    LB2{{LB2}}
+graph TD
+    LAN([External Network])
+    LB1["192.168.50.30 (DHCP)"<br />LB1<br />10.0.0.2]
+    LB2["192.168.50.31 (DHCP)"<br />LB2<br />10.0.0.3]
+    MASTER1[MASTER1]
+    MASTER2[MASTER2]
+    MASTER3[MASTER3]
+    NODE1[NODE1]
+    INTERNAL_NAS[(NAS)]
     INTERNAL_SUBNET([Internal Subnet])
-    KUBE_API{{K3S API}}
+    KUBE_API{{K3S API Service}}
     KUBE_SVC{{K3S LoadBalancer Service}}
-    LAN_SVC{{LAN Service}}
-    LAN ==>|Floating LAN IP| LB1
-    LAN -.-> LB2
-    LB1 ==>|Floating Internal IP| INTERNAL_SUBNET
-    LB2 -.-> INTERNAL_SUBNET
-    INTERNAL_SUBNET ==> KUBE_API & KUBE_SVC & LAN_SVC
+    INTERNAL_STORAGE{{Storage Service}}
+    LAN <==>|Floating External IP<br />192.168.50.150| LB1
+    LAN <-.-> LB2
+    LB1 <==>|Floating Internal IP<br />10.0.0.1| INTERNAL_SUBNET
+    LB2 <-.-> INTERNAL_SUBNET
+    INTERNAL_SUBNET <==> KUBE_API & KUBE_SVC & INTERNAL_STORAGE
+    KUBE_API <==> MASTER1 & MASTER2 & MASTER3
+    KUBE_SVC <==> NODE1
+    INTERNAL_STORAGE <==> INTERNAL_NAS
 ```
 
 ## Load balancers
