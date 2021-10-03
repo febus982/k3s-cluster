@@ -15,6 +15,7 @@
       --owner={{ flux.repository_owner }}
       --repository={{ flux.repository_name }}
       --path={{ flux.cluster_path }}
+      --read-write-key
       {{ '--personal' if flux.github_personal_account else '' }}
   environment:
     GITHUB_TOKEN: "{{ flux.github_personal_token }}"
