@@ -9,6 +9,25 @@ all:
     lb_external_interface: "wlan0"
     consul:
       gossip_secret: "consul_encryption_secret"
+    # Uncomment to use external datastore HA: https://rancher.com/docs/k3s/latest/en/installation/ha/
+#    k3s_datastore_endpoint: 'http://192.168.50.100:2379'
+    k3s_token: "somesecrettoken"
+    # K3S components: https://rancher.com/docs/k3s/latest/en/installation/install-options/server-config/#kubernetes-components
+    k3s_components:
+      coredns: yes
+      servicelb: no # We'll use MetalLB to assign IP addresses to LoadBalancer services
+      traefik: no # We'll use nginx-ingress, to maintain control over the installation options (assign the correct IP address to the service)
+      local-storage: yes # Local storage is not great for persistent volumes, you should install a better one if possible
+      metrics-server: yes
+    # We use FluxCD and GitHub to deploy the other components: https://fluxcd.io/docs/
+    flux:
+      enabled: yes
+      version: "0.17.2"
+      repository_owner: "febus982"
+      repository_name: "k3s-cluster-flux-sample" # You should fork/copy content from https://github.com/febus982/k3s-cluster-flux-sample
+      cluster_path: "clusters/k3s-pi"
+      github_personal_account: yes # If the repository owner is a GitHub Organisation set this to `no`
+      github_personal_token: "<personal_token>" # A personal token is necessary, check necessary permissions here: https://fluxcd.io/docs/installation/#github-and-github-enterprise
   children:
     k3s_cluster:
     load_balancer:
@@ -19,25 +38,6 @@ k3s_cluster:
     # We avoid persisting the SSH host fingerprint to avoid errors caused by the floating IP
     # Jumping between the different Load Balancer Raspberry PIs
     ansible_ssh_common_args: "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ForwardAgent=yes -o ProxyCommand=\"ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -W %h:%p -q pi@{{ lb_external_floating_ip }}\""
-    # Uncomment to use external datastore HA: https://rancher.com/docs/k3s/latest/en/installation/ha/
-#    k3s_datastore_endpoint: 'http://192.168.50.100:2379'
-    k3s_token: "somesecrettoken"
-    # K3S components: https://rancher.com/docs/k3s/latest/en/installation/install-options/server-config/#kubernetes-components
-    k3s_components:
-      coredns: yes
-      servicelb: no # We'll use MetalLB to assigne IP addresses to LoadBalancer services
-      traefik: no # We'll use nginx-ingress, to maintain control over the installation options (assign the correct IP address to the service)
-      local-storage: yes
-      metrics-server: yes
-    # We use FluxCD to deploy the other components: https://fluxcd.io/docs/
-    flux:
-      enabled: yes
-      version: "0.17.2"
-      repository_owner: "febus982"
-      repository_name: "k3s-flux-sample"
-      cluster_path: "clusters/k3s-pi"
-      github_personal_account: yes # If the owner is a GitHub Organisation set this to `no`
-      github_personal_token: "<personal_token>" # A personal token is necessary for flux to interact with the repository
   children:
     master:
     node:
@@ -78,7 +78,6 @@ load_balancer:
         ports:
           - 80
           - 443
-
   hosts:
     # List of Load Balancer Raspberry PIs
     lb1:

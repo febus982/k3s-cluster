@@ -35,6 +35,8 @@ pipenv run k3s_install
 As soon as the first master node is running a `kubeconfig.yml` file will be generated in the root directory of
 the project, ready to be used by `kubectl` command.
 
+When all the nodes are installed you should be able to access the Consul UI to monitor nodes and services on [http://192.168.50.150:8500/ui](http://192.168.50.150:8500/ui).
+
 ### Notes
 
 - the step `TASK [apt_dependencies : Run apt dist-upgrade]` might take a while (~10-15 minutes if system is not up to date)

@@ -4,7 +4,7 @@ repo_name: febus982/k3s-cluster
 nav:
   - Home: index.md
   - Network design: network.md
-  - Initial setup: initial_setup.md
+  - Preparation: preparation.md
   - Load balancers setup: load_balancers.md
   - K3S nodes setup: k3s_nodes.md
 
