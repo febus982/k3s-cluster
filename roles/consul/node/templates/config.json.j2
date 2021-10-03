@@ -11,7 +11,7 @@
         "only_passing": true
     },
     "enable_syslog": true,
-    "encrypt": "bnRHLmJ6TeLomirgEOWP2g==",
+    "encrypt": "{{ consul.gossip_secret }}",
     "leave_on_terminate": true,
     "log_level": "ERR",
     "log_file": "/var/log/consul/consul.log",
