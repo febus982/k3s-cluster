@@ -62,7 +62,7 @@ To use Flux CD make sure you:
 * Fork or copy the content of the repository (you need write access to the repository setup in the ansible inventory)
 * Create a personal token for Flux bootstrap. Check necessary permissions [here](https://fluxcd.io/docs/installation/#github-and-github-enterprise)
 
-Currently only GitHub repository are supported but it should be easy enough to use a different provider by altering
+Currently only GitHub repositories are supported but it should be easy enough to use a different provider by altering
 [this file](https://github.com/febus982/k3s-cluster/blob/master/roles/fluxcd/tasks/main.yml) and the inventory variables.
 (Pull requests with other providers are appreciated)
 
