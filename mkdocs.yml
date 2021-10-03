@@ -10,8 +10,11 @@ nav:
 
 markdown_extensions:
   - pymdownx.snippets
-  - pymdownx.highlight
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:mermaid2.fence_mermaid
 
 theme:
   icon:
@@ -37,3 +40,13 @@ extra:
       link: https://github.com/febus982/flux-k3s-cluster
     - icon: fontawesome/brands/linkedin
       link: https://www.linkedin.com/in/federico-b-a0b78232/
+
+plugins:
+  - search
+  - mermaid2:
+      arguments:
+        theme: |
+          ^(JSON.parse(window.localStorage.getItem('/.__palette')).index == 1) ? 'dark' : 'neutral'
+
+extra_javascript:
+  - extra/refresh_on_toggle_dark_light.js

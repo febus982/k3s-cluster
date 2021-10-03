@@ -4,9 +4,10 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+ansible = "*"
 mkdocs = "*"
 mkdocs-material = "*"
-ansible = "*"
+mkdocs-mermaid2-plugin = "*"
 pymdown-extensions = "*"
 
 [dev-packages]
@@ -17,7 +18,6 @@ python_version = "3"
 [scripts]
 docs = "mkdocs serve"
 build_docs = "mkdocs build"
-
 ansible-requirements = "ansible-galaxy install -f -r galaxy-requirements.yml"
 lb_bootstrap_pi = "ansible-playbook playbooks/bootstrap_new_pi.yml"
 lb_install = "ansible-playbook playbooks/load_balancer/install.yml"
