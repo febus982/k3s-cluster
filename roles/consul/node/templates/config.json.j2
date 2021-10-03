@@ -18,6 +18,9 @@
     "rejoin_after_leave": true,
     "retry_join": ["{{ master_list | join('", "') }}"],
     "server": {{ "true" if consul_master else "false" }},
+    "ports": {
+        "serf_lan": 9301
+    },
     "start_join": ["{{ master_list | join('", "') }}"],
     "ui": true
 }
