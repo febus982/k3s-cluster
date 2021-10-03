@@ -23,7 +23,7 @@ pipenv run k3s_bootstrap -e new_hostname=master1
 
 Repeat the same for all the nodes defined in the ansible inventory, with the proper hostname.
 
-Note: The `ssh-copy-id` command has additional options from the ones in the load balancer setup.
+Note: The `ssh-copy-id` command has different options from the same command in the load balancer setup.
 
 ## K3S Nodes PIs provisioning
 
@@ -31,6 +31,9 @@ Run:
 ```bash
 pipenv run k3s_install
 ```
+
+As soon as the first master node is running a `kubeconfig.yml` file will be generated in the root directory of
+the project, ready to be used by `kubectl` command.
 
 ### Notes
 

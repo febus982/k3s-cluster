@@ -46,14 +46,9 @@ then:
 pipenv run lb_install
 ```
 
+Haproxy statistics are now accessible at [http://192.168.50.150:1936/stats](http://192.168.50.150:1936/stats)
+
 ### Notes
 
 - While it's technically possible to provision the load balancer without LAN connection, some services (e.g. consul) won't work properly until the LAN is connected.
 - the step `TASK [apt_dependencies : Run apt dist-upgrade]` might take a while (~10-15 minutes if system is not up to date)
-
-## Applications
-
-We have two applications we can use to monitor the status of the Raspberry PIs connected to the internal network:
-
-- Consul, to monitor hardware PIs health, accessible at [http://192.168.50.150:8500](http://192.168.50.150:8500)
-- Haproxy statistics, accessible at [http://192.168.50.150:1936/stats](http://192.168.50.150:1936/stats)

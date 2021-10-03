@@ -38,7 +38,14 @@ network={
 }
 ```
 
-## Setup ansible inventory
+## Download source code and setup ansible inventory
+
+Clone the [git repository](https://github.com/febus982/k3s-cluster) to your local machine.
+
+```bash
+git clone https://github.com/febus982/k3s-cluster.git
+cd k3s-cluster
+```
 
 Copy the sample inventory and customise it, if necessary:
 
