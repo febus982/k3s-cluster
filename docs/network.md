@@ -1,6 +1,22 @@
 # Network design
 
-The system is designed to run in an independent subnet.
+The system is designed to create and use an isolated subnet.
+
+``` mermaid
+graph LR
+    LAN([WiFi])
+    LB1{{LB1}}
+    LB2{{LB2}}
+    INTERNAL_SUBNET([Internal Subnet])
+    KUBE_API{{K3S API}}
+    KUBE_SVC{{K3S LoadBalancer Service}}
+    LAN_SVC{{LAN Service}}
+    LAN ==>|Floating LAN IP| LB1
+    LAN -.-> LB2
+    LB1 ==>|Floating Internal IP| INTERNAL_SUBNET
+    LB2 -.-> INTERNAL_SUBNET
+    INTERNAL_SUBNET ==> KUBE_API & KUBE_SVC & LAN_SVC
+```
 
 ## Load balancers
 
