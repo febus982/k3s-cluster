@@ -7,11 +7,6 @@
     - role: apt_dependencies
     - role: reboot_and_reconnect
     - role: ntp
-    - role: consul/node
-      vars:
-        consul_master: no
-        bind_addr: "{% raw %}{{ GetInterfaceIP \\\"eth0\\\" }}{% endraw %}"
-        master_list: "{{ groups['load_balancer'] | map('extract', hostvars, 'internal_cidr') | map('regex_replace', '((?:[0-9]{1,3}\\.){3}[0-9]{1,3})(?:\\/[0-9]{1,2})+', '\\1') | list }}"
     - role: reboot_and_reconnect
 
 - hosts: master
@@ -22,10 +17,6 @@
     - 1
     - "100%"
   roles:
-    - role: consul/http_service
-      vars:
-        service_name: k3s_master
-        service_port: 6443
     - role: k3s/master
       become: yes
 
