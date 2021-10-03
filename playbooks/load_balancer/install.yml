@@ -19,7 +19,7 @@
       vars:
         consul_master: yes
         bind_addr: "{{ internal_cidr | regex_replace('((?:[0-9]{1,3}\\.){3}[0-9]{1,3})(?:\\/[0-9]{1,2})+', '\\1' ) }}"
-        master_list: "{{ groups['load_balancer'] | map('extract', hostvars, 'internal_cidr') | map('regex_replace', '((?:[0-9]{1,3}\\.){3}[0-9]{1,3})(?:\\/[0-9]{1,2})+', '\\1') | list }}"
+        master_list: "{{ groups['load_balancer'] | map('extract', hostvars, 'ansible_host') | list }} + {{ groups['master'] | map('extract', hostvars, 'ansible_host') | list }}"
     - role: haproxy
       vars:
         k3s_masters_amount: "{{ groups['master'] | length }}"
