@@ -46,6 +46,7 @@ addresses between services, which can cause clashes if the same port is used on 
     * it exposes kubernetes services on the internal network via DNS
     * it exposes network services to kubernetes, creating Services of type ExternalService. _Note: this has not
 yet been completely configured._
+    * it can provide Service Mesh functionality.
 * [Nginx ingress controller](https://kubernetes.github.io/ingress-nginx/): We use it instead of the controller provided
 by K3S so that we have more control over the installation process. Coupled with [MetalLB](https://metallb.universe.tf/)
 we can give a specific IP address to the Service so that the HAProxy Load Balancer knows where to forward ingress requests.
