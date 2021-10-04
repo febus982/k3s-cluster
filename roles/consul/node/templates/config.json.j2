@@ -2,6 +2,9 @@
     "bind_addr": "{{ bind_addr }}",
     "bootstrap_expect": {{ 0 if not consul_master else master_list | length }},
     "client_addr": "0.0.0.0",
+    "connect": {
+        "enabled": true
+    },
     "datacenter": "DC1",
     "data_dir": "/opt/consul",
     "domain": "{{ consul_domain_suffix }}",
