@@ -15,6 +15,8 @@ ssh-copy-id -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
  pi@raspberrypi.local
 ```
 
+Note: The `ssh-copy-id` command has different options from the same command in the load balancer setup.
+
 then:
 
 ```bash
@@ -22,8 +24,6 @@ pipenv run k3s_bootstrap -e new_hostname=master1
 ```
 
 Repeat the same for all the nodes defined in the ansible inventory, with the proper hostname.
-
-Note: The `ssh-copy-id` command has different options from the same command in the load balancer setup.
 
 ## K3S Nodes PIs provisioning
 

@@ -46,6 +46,3 @@ The internal network uses the CIDR `10.0.0.0/16` and the following range design 
 - `10.0.0.2 - 10.0.0.254`: reserved for static IP addresses assigned to physical machines in the internal network (e.g. Load Balancer IPs)
 - `10.0.1.1 - 10.0.1.254`: reserved for K3S services of type LoadBalancer
 - `10.0.2.1 - 10.0.255.254`: DHCP range served over the ethernet interface
-
-Theoretically the DHCP server will serve IP addresses to any other machine connected to the ethernet network, so
-adding new machines will be extremely simple.

@@ -4,6 +4,9 @@
 
 We need to do these operations by turning on one PI at a time, otherwise the `raspberrypi.local` name will collide.
 
+_PLEASE: If you know of a way of customising the PI hostname automatically in Raspberry OS let me know so I can add it
+to this guide_
+
 Start the first PI, it will become available on `raspberrypi.local` hostname (default pi user password is `raspberry`). Run:
 
 ```bash
