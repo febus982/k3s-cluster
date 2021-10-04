@@ -20,7 +20,10 @@ The provided script has been tested on `arm64` Raspberry Pi OS using:
 The ideal setup would be composed of 5 different Raspberry PIs:
 
 - 2 Raspberry PI would serve the function of Gateway and Load Balancer
-- 3 Raspberry PI would serve the function of Kubernetes masters, holding the control plane AND additional load.
+- 3 Raspberry PI would serve the function of Kubernetes masters, holding the control plane and additional load. _(Running
+loads on Kubernetes masters is a bad practice that can make your cluster unresponsive. Depending on your hardware setup,
+you will be able to add the necessary taints to the master nodes in the ansible inventory, as documented in the
+[K3S documentation](https://rancher.com/docs/k3s/latest/en/advanced/#node-labels-and-taints))_
 
 It is possible to still run an HA setup using only 2 masters, but an [external datastore](https://rancher.com/docs/k3s/latest/en/installation/datastore)
 would be necessary.
@@ -31,7 +34,7 @@ It is possible to run the playbooks using only one Kubernetes master.
 
 It _should_ also be possible to run against a single Load Balancer, but this setup has not been tested.
 
-Note: We need at least 3 nodes between Load Balancer and Kubernetes master, to be able to bootstrap Consul.
+Note: We need at least 3 nodes between Load Balancers and Kubernetes masters, to be able to bootstrap Consul.
 
 ## Core software
 
