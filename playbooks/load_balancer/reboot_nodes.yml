@@ -1,6 +1,7 @@
 ---
 - hosts: load_balancer
   become: yes
+  serial: 1
   tasks:
     - name: Reboot
       reboot:
