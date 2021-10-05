@@ -12,7 +12,7 @@
 - hosts: master
   gather_facts: yes
   become: no
-  # We need to init the first master in isolation
+  # We need to init the first master separately
   serial:
     - 1
     - "100%"

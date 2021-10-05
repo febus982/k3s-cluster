@@ -43,6 +43,7 @@
     dest: "{{ playbook_dir }}/../../node-token"
     flat: yes
   become: true
+  when: ansible_host == first_master_hostname
 
 #### External kubeconfig
 - name: Copy kubeconfig file to tmp directory
@@ -50,6 +51,7 @@
     src: /etc/rancher/k3s/k3s.yaml
     dest: /tmp/kubeconfig
     remote_src: yes
+  when: ansible_host == first_master_hostname
 
 - name: "Replace https://localhost:6443 by https://{{ lb_external_floating_ip }}:6443"
   command: >-
@@ -57,15 +59,18 @@
       --server=https://{{ lb_external_floating_ip }}:6443
       --kubeconfig /tmp/kubeconfig
   changed_when: true
+  when: ansible_host == first_master_hostname
 
 - name: Fetch kubeconfig
   ansible.builtin.fetch:
     src: /tmp/kubeconfig
     dest: "{{ playbook_dir }}/../../kubeconfig.yml"
     flat: yes
+  when: ansible_host == first_master_hostname
 
 - name: Remove temp kubeconfig
   ansible.builtin.file:
     path: /tmp/kubeconfig
     state: absent
+  when: ansible_host == first_master_hostname
 ...
