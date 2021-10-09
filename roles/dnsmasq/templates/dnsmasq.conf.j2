@@ -2,26 +2,30 @@
 # GLOBAL options
 domain-needed
 bogus-priv
-#no-resolv
+no-resolv
 filterwin2k
 expand-hosts
-domain=local
-local=/local/
+local=/{{ network_domain }}/
+domain={{ network_domain }}
 listen-address=127.0.0.1
 #listen-address={{ external_floating_ip }}
 listen-address={{ internal_floating_ip }}
 
 # DHCP range
 dhcp-range=10.0.2.1,10.0.254.254,12h
+
+# DHCP options
+# Reference: https://www.efficientip.com/glossary/dhcp-option/
 dhcp-option=option:router,{{ internal_floating_ip }}
 dhcp-option=option:dns-server,{{ internal_floating_ip }}
 
-# Consul domain services
-#server=/service.##consul_domain##/127.0.0.1#8600
+# Upstream DNS servers
+# Consul domain
+server=/{{ consul.domain }}/127.0.0.1#8600
 # Use open source DNS servers
-#server=8.8.8.8
-#server=8.8.4.4
-#server=208.67.220.220
+server=1.1.1.1
+server=8.8.8.8
+server=208.67.220.220
 
 
 #Create custom 'domains'.

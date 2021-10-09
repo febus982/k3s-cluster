@@ -2,6 +2,10 @@
 all:
   vars:
     ansible_user: pi
+    # Network domain name. Good practice is using a subdomain of an owned domain name
+    # NOTE: DNS resolution using this domain is not yet completely implemented
+    #       It's still preferred to rely on avahi .local hostnames
+    network_domain: "dmz.example.com"
     # Floating IP configuration
     lb_internal_floating_ip: "10.0.0.1"
     lb_internal_interface: "eth0"
