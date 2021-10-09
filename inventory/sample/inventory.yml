@@ -9,6 +9,7 @@ all:
     lb_external_interface: "wlan0"
     consul:
       gossip_secret: "consul_encryption_secret"
+      domain: "consul" # Consul service discovery domain
     # Uncomment to use external datastore HA: https://rancher.com/docs/k3s/latest/en/installation/ha/
 #    k3s_datastore_endpoint: 'http://192.168.50.100:2379'
     k3s_token: "somesecrettoken"
@@ -67,9 +68,9 @@ load_balancer:
     haproxy_k3s_redirects:
       - name: k3s_api
         target_hostnames:
-          - 'master1.local'
-          - 'master2.local'
-          - 'master3.local'
+          - "master1.node.{{ consul.domain }}"
+          - "master2.node.{{ consul.domain }}"
+          - "master3.node.{{ consul.domain }}"
         ports:
           - 6443
       - name: k3s_ingress_gateway
