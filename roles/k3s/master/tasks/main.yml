@@ -53,7 +53,7 @@
     remote_src: yes
   when: ansible_host == first_master_hostname
 
-- name: "Replace https://localhost:6443 by https://{{ lb_external_floating_ip }}:6443"
+- name: "Replace https://localhost:6443 with https://{{ lb_external_floating_ip }}:6443"
   command: >-
     k3s kubectl config set-cluster default
       --server=https://{{ lb_external_floating_ip }}:6443
