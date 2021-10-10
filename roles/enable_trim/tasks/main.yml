@@ -1,0 +1,73 @@
+---
+- name: Install apt dependencies
+  apt:
+    pkg:
+    - sg3-utils
+    - lsscsi
+    state: latest
+
+###### TRIM CHECK ########
+- name: Check if TRIM is supported
+  command:
+    cmd: sg_vpd -p lbpv /dev/sda
+  register: trim_check_cmd
+
+- debug:
+    msg: "Unmap command IS supported :)"
+  when: "'Unmap command supported (LBPU): 1' in trim_check_cmd.stdout"
+
+- fail:
+    msg: "Unmap command IS NOT supported. Please rerun the playbooks after disabling `enable_sda_trim` in your inventory"
+  when: "'Unmap command supported (LBPU): 1' not in trim_check_cmd.stdout"
+
+###### TRIM VALUES ########
+- name: Get maximum unmap count
+  command:
+    cmd: sg_vpd -p bl /dev/sda
+  register: max_unblock_cmd
+
+- name: Store maximum unmap count
+  set_fact:
+    max_lba_count: "{{ (max_unblock_cmd.stdout | regex_search('Maximum unmap LBA count: ([0-9]+)\n', '\\1' ))[0] }}"
+
+- name: Check Logical block length
+  shell:
+    cmd: "sg_readcap -l /dev/sda"
+  register: sg_readcap_cmd
+
+- name: Store Logical block length
+  set_fact:
+    lba_length: "{{ (sg_readcap_cmd.stdout | regex_search('Logical block length=([0-9]*) bytes', '\\1' ))[0] }}"
+
+#### Enable TRIM #####
+- name: Check disks provisioning mode
+  shell:
+    cmd: "find /sys/ -name provisioning_mode -exec grep -H . {} + | sort"
+  register: disk_provisioning_mode_cmd
+
+- name: "Enable unmap on {{ item }}"
+  shell:
+    cmd: "echo unmap > {{ (item | regex_search('(.*provisioning_mode):(.*)', '\\1' ))[0] }}"
+  loop: "{{ disk_provisioning_mode_cmd.stdout_lines }}"
+  when: (item | regex_search('(.*provisioning_mode):(.*)', '\\2' ))[0] == 'full'
+
+## Add TRIM udev rules ##
+- name: Get USB list
+  shell:
+    cmd: lsusb
+  register: lsusb_cmd
+
+- name: Copy udev rule
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/10-trim.rules"
+    dest: /etc/udev/rules.d/10-trim.rules
+  vars:
+    vendor_id: "{{ (lsusb_cmd.stdout | regex_search('Bus 002 Device 002: ID (.{4}):(.{4})', '\\1' ))[0] }}"
+    product_id: "{{ (lsusb_cmd.stdout | regex_search('Bus 002 Device 002: ID (.{4}):(.{4})', '\\2' ))[0] }}"
+
+- name: Enable and restart fstrim.timer
+  ansible.builtin.systemd:
+    name: fstrim.timer
+    state: started
+    enabled: yes
+...

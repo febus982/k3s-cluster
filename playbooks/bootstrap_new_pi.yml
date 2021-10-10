@@ -2,6 +2,9 @@
 - hosts: raw_pi
   become: yes
   tasks:
+    - include_role:
+        name: enable_trim
+      when: enable_sda_trim
     - name: Set hostname
       shell:
         cmd: "raspi-config nonint do_hostname {{ new_hostname }}"

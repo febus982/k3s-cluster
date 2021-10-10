@@ -101,6 +101,9 @@ raw_pi:
   # is assigned to all Raspberry PIs as default and it would cause errors
   vars:
     ansible_ssh_common_args: "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ForwardAgent=yes {{ ('-o ProxyCommand=\"ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -W %h:%p -q pi@' + lb_external_floating_ip + '\"') if nested_pi is defined else '' }}"
+    # `enable_sda_trim` is an EXPERIMENTAL FEATURE, it will enable TRIM on /dev/sda if found on `Bus 002 Device 002`
+    # using `lsusb`. IT CAN DESTROY THE FIRMWARE OF YOUR USB ADAPTER IF TRIM NOT COMPLETELY SUPPORTED
+    enable_sda_trim: no
   hosts:
     raspberrypi:
       ansible_host: raspberrypi.local
