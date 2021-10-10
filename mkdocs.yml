@@ -7,6 +7,7 @@ nav:
   - Preparation: preparation.md
   - Load balancers setup: load_balancers.md
   - K3S nodes setup: k3s_nodes.md
+  - Maintenance operations: maintenance.md
 
 markdown_extensions:
   - pymdownx.snippets

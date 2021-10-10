@@ -27,7 +27,7 @@
   shell:
     cmd: >
       curl -sfL https://get.k3s.io |
-      {{ 'K3S_CLUSTER_INIT=true' if ansible_host == first_master_hostname else 'K3S_URL=https://' + lb_internal_floating_ip + ':6443' }}
+      {{ 'K3S_CLUSTER_INIT=true' if (ansible_host == first_master_hostname and k3s_reinstall is not defined) else 'K3S_URL=https://' + lb_internal_floating_ip + ':6443' }}
       INSTALL_K3S_EXEC=server
       sh -
     creates: /etc/rancher/k3s/k3s.yaml
