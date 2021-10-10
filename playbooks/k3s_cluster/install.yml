@@ -33,5 +33,5 @@
   become: no
   roles:
     - role: fluxcd
-      when: flux.enabled
+      when: flux.enabled and k3s_reinstall is not defined
 ...
