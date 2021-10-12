@@ -14,6 +14,7 @@ all:
     consul:
       gossip_secret: "+7ZxMaGbyg0wSbwBIWLAa2puYjompsMMl37paPKeiLs=" # Generate your own secret using `consul keygen` command
       domain: "consul" # Consul service discovery domain
+      version: "1.10.3"
     # Uncomment to use external datastore HA: https://rancher.com/docs/k3s/latest/en/installation/ha/
 #    k3s_datastore_endpoint: 'http://192.168.50.100:2379'
     k3s_token: "somesecrettoken"

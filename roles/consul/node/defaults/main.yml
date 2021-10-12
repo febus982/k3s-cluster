@@ -1,6 +1,5 @@
 ---
 consul_master: no
-consul_version: "1.10.3"
 consul_arch_map:
   aarch64: "arm64"
   armv7l: "armhfv6"
