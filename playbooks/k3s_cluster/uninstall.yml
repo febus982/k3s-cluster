@@ -7,6 +7,7 @@
       vars:
         master: no
       become: yes
+      ignore_errors: yes
 
 - hosts: master
   gather_facts: yes
@@ -16,4 +17,5 @@
       vars:
         master: yes
       become: yes
+      ignore_errors: yes
 ...
