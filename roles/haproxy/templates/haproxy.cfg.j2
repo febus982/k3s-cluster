@@ -18,11 +18,12 @@ frontend f_{{ redirect['name'] }}_{{ port }}
     default_backend b_{{ redirect['name'] }}_{{ port }}
 
 backend b_{{ redirect['name'] }}_{{ port }}
+    balance leastconn
 {% if redirect['target_ips'] is defined %}{% for ip in redirect['target_ips'] %}
-    server {{ ip }} {{ ip }}:{{ port }} check init-addr none
+    server {{ ip }} {{ ip }}:{{ port }} check
 {% endfor  %}{% endif %}
 {% if redirect['target_hostnames'] is defined %}{% for host in redirect['target_hostnames'] %}
-    server {{ host }} {{ host }}:{{ port }} check resolvers local resolve-prefer ipv4 init-addr none
+    server {{ host }} {{ host }}:{{ port }} check {{ "resolvers local resolve-prefer ipv4 init-addr none" if ".local" not in host else "" }}
 {% endfor  %}{% endif %}
 {% endfor  %}{# End port cycle #}
 {% endfor  %}{# End redirect cycle #}
