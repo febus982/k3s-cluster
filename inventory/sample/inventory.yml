@@ -72,9 +72,9 @@ load_balancer:
     haproxy_k3s_redirects:
       - name: k3s_api
         target_hostnames:
-          - "master1.node.{{ consul.domain }}"
-          - "master2.node.{{ consul.domain }}"
-          - "master3.node.{{ consul.domain }}"
+          - "master1.local"
+          - "master2.local"
+          - "master3.local"
         ports:
           - 6443
       - name: k3s_ingress_gateway
