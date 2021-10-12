@@ -32,8 +32,6 @@
   become: no
   roles:
     - role: haproxy
-      vars:
-        k3s_masters_amount: "{{ groups['master'] | length }}"
     - role: keepalived
       vars:
         priority: "{{ lb_priority }}"
