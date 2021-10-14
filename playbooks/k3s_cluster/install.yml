@@ -13,9 +13,7 @@
   gather_facts: yes
   become: no
   # We need to init the first master separately
-  serial:
-    - 1
-    - "100%"
+  serial: 1
   roles:
     - role: k3s/master
       become: yes
