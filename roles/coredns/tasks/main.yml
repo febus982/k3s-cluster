@@ -1,0 +1,42 @@
+- name: Download Helm cli
+  unarchive:
+    src: "https://get.helm.sh/helm-v{{ helm_version }}-linux-arm64.tar.gz"
+    dest: "."
+    remote_src: yes
+  become: true
+
+- name: Install Helm cli
+  copy:
+    src: "./linux-arm64/helm"
+    dest: "/usr/local/bin/helm"
+    mode: 0551
+    remote_src: yes
+  become: true
+
+- name: Remove Helm temp files
+  file:
+    path: "./linux-arm64"
+    state: absent
+  become: true
+
+- name: Add helm coredns repository
+  command: helm repo add coredns https://coredns.github.io/helm
+
+- name: Update helm repositories
+  command: helm repo update
+
+- name: Copy Helm values
+  copy:
+    src: "{{ role_path }}/files/helm-values.yaml"
+    dest: coredns-values.yaml
+
+- name: Install or upgrade {{ chartName }} helm chart
+  command: >
+    helm --namespace=kube-system install coredns coredns/coredns --wait
+    --kubeconfig /etc/rancher/k3s/k3s.yaml
+    --values coredns-values.yaml
+
+- name: Remove Helm values
+  file:
+    path: coredns-values.yaml
+    state: absent

@@ -20,7 +20,7 @@ all:
     k3s_token: "somesecrettoken"
     # K3S components: https://rancher.com/docs/k3s/latest/en/installation/install-options/server-config/#kubernetes-components
     k3s_components:
-      coredns: yes
+      coredns: no # We'll install a customised CoreDNS to be able to customise the config and manage it in Flux repository
       servicelb: no # We'll use MetalLB to assign IP addresses to LoadBalancer services
       traefik: no # We'll use nginx-ingress, to maintain control over the installation options (assign the correct IP address to the service)
       local-storage: yes # Local storage is not great for persistent volumes, you should install a better one if possible
