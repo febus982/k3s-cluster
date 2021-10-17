@@ -24,7 +24,6 @@
     - role: consul/node
       vars:
         consul_master: yes
-        bind_addr: "{{ internal_cidr | regex_replace('((?:[0-9]{1,3}\\.){3}[0-9]{1,3})(?:\\/[0-9]{1,2})+', '\\1' ) }}"
         master_list: "{{ groups['load_balancer'] | map('extract', hostvars, 'ansible_host') | list }} + {{ groups['master'] | map('extract', hostvars, 'ansible_host') | list }}"
 
 - hosts: load_balancer
