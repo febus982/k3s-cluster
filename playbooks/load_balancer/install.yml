@@ -19,12 +19,11 @@
 - hosts: load_balancer
   gather_facts: yes
   become: no
-  serial: 1
   roles:
     - role: consul/node
       vars:
-        consul_master: yes
-        master_list: "{{ groups['load_balancer'] | map('extract', hostvars, 'ansible_host') | list }} + {{ groups['master'] | map('extract', hostvars, 'ansible_host') | list }}"
+        consul_master: no
+        master_list: "{{ groups['master'] | map('extract', hostvars, 'ansible_host') | list }}"
 
 - hosts: load_balancer
   gather_facts: yes
