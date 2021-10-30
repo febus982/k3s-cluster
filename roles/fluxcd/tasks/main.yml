@@ -1,4 +1,14 @@
 ---
+- name: Delete K3S HelmChart CRD
+  command:
+    cmd: "kubectl delete crd helmcharts.helm.cattle.io"
+  ignore_errors: yes
+
+- name: Delete K3S HelmChart CRD
+  command:
+    cmd: "kubectl delete crd helmchartconfigs.helm.cattle.io"
+  ignore_errors: yes
+
 - name: Download flux cli
   ansible.builtin.unarchive:
     src: "https://github.com/fluxcd/flux2/releases/download/v{{ flux.version }}/flux_{{ flux.version }}_linux_arm.tar.gz"
