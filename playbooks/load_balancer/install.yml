@@ -21,6 +21,7 @@
   become: no
   roles:
     - role: consul/node
+      when: consul.enabled
       vars:
         consul_master: no
         master_list: "{{ groups['master'] | map('extract', hostvars, 'ansible_host') | list }}"

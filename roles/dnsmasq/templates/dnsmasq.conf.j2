@@ -20,8 +20,10 @@ dhcp-option=option:router,{{ internal_floating_ip }}
 dhcp-option=option:dns-server,{{ internal_floating_ip }}
 
 # Upstream DNS servers
+{% if consul.enabled %}
 # Consul domain
 server=/{{ consul.domain }}/127.0.0.1#8600
+{% endif %}
 # Use open source DNS servers
 server=1.1.1.1
 server=8.8.8.8

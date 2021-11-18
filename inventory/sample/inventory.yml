@@ -12,6 +12,7 @@ all:
     lb_external_floating_ip: "192.168.50.150"
     lb_external_interface: "wlan0"
     consul:
+      enabled: yes
       gossip_secret: "+7ZxMaGbyg0wSbwBIWLAa2puYjompsMMl37paPKeiLs=" # Generate your own secret using `consul keygen` command
       domain: "consul" # Consul service discovery domain
       version: "1.10.3"
