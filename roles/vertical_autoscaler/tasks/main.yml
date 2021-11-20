@@ -1,0 +1,22 @@
+---
+- name: Install git
+  apt:
+    pkg:
+    - git
+    state: latest
+  become: yes
+
+- name: Clone locally the autoscaler repository
+  ansible.builtin.git:
+    repo: 'https://github.com/kubernetes/autoscaler.git'
+    dest: /tmp/autoscaler
+    version: "vertical-pod-autoscaler-{{ vertical_autoscaler.version }}"
+    force: yes
+
+- name: Install vertical autoscaler
+  shell:
+    cmd: |
+      cd /tmp/autoscaler/vertical-pod-autoscaler
+      ./hack/vpa-down.sh
+      ./hack/vpa-up.sh
+...

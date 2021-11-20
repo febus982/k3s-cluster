@@ -34,4 +34,6 @@
       when: not k3s_components.coredns and k3s_reinstall is not defined
     - role: fluxcd
       when: flux.enabled and k3s_reinstall is not defined
+    - role: vertical_autoscaler
+      when: vertical_autoscaler.enabled and k3s_reinstall is not defined
 ...
