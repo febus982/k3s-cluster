@@ -23,11 +23,29 @@
     creates: /etc/rancher/k3s/k3s.yaml
   when: not ha_integrated_datastore
 
+- name: Check if cluster has been initialised
+  stat:
+    path: "{{ playbook_dir }}/../../node-token"
+  register: node_token_stat_result
+  delegate_to: localhost
+  become: false
+
+# Note: add option to force reinstallation
+- name: Check if cluster needs initialisation
+  set_fact:
+    cluster_needs_init: "{{ not node_token_stat_result.stat.exists or k3s_reinstall is defined }}"
+
+#- debug:
+#    var: node_token_stat_result.stat.exists
+#
+#- debug:
+#    var: cluster_needs_init
+
 - name: Install K3S Master (Integrated datastore mode)
   shell:
     cmd: >
       curl -sfL https://get.k3s.io |
-      {{ 'K3S_CLUSTER_INIT=true' if (ansible_host == first_master_hostname and k3s_reinstall is not defined) else 'K3S_URL=https://' + lb_internal_floating_ip + ':6443' }}
+      {{ 'K3S_CLUSTER_INIT=true' if cluster_needs_init else 'K3S_URL=https://' + lb_internal_floating_ip + ':6443' }}
       INSTALL_K3S_EXEC=server
       sh -
     creates: /etc/rancher/k3s/k3s.yaml
@@ -43,7 +61,7 @@
     dest: "{{ playbook_dir }}/../../node-token"
     flat: yes
   become: true
-  when: ansible_host == first_master_hostname
+  when: cluster_needs_init
 
 #### External kubeconfig
 - name: Copy kubeconfig file to tmp directory
@@ -51,7 +69,7 @@
     src: /etc/rancher/k3s/k3s.yaml
     dest: /tmp/kubeconfig
     remote_src: yes
-  when: ansible_host == first_master_hostname
+  when: cluster_needs_init
 
 - name: "Replace https://localhost:6443 with https://{{ lb_external_floating_ip }}:6443"
   command: >-
@@ -59,18 +77,18 @@
       --server=https://{{ lb_external_floating_ip }}:6443
       --kubeconfig /tmp/kubeconfig
   changed_when: true
-  when: ansible_host == first_master_hostname
+  when: cluster_needs_init
 
 - name: Fetch kubeconfig
   ansible.builtin.fetch:
     src: /tmp/kubeconfig
     dest: "{{ playbook_dir }}/../../kubeconfig.yml"
     flat: yes
-  when: ansible_host == first_master_hostname
+  when: cluster_needs_init
 
 - name: Remove temp kubeconfig
   ansible.builtin.file:
     path: /tmp/kubeconfig
     state: absent
-  when: ansible_host == first_master_hostname
+  when: cluster_needs_init
 ...
