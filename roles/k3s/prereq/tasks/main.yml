@@ -45,6 +45,13 @@
     backrefs: true
   become: yes
 
+- name: Make sure iptables is installed
+  apt:
+    pkg:
+    - iptables
+    state: latest
+  become: yes
+
 - name: Flush iptables before changing to iptables-legacy
   iptables:
     flush: true
