@@ -1,8 +1,0 @@
----
-- hosts: load_balancer
-  become: yes
-  tasks:
-    - name: Shutdown in 1 minute
-      shell:
-        cmd: "sudo shutdown -h +1"
-...

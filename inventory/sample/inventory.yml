@@ -40,14 +40,13 @@ all:
       version: "0.9.2"
   children:
     k3s_cluster:
-    load_balancer:
-    raw_pi:
 
 k3s_cluster:
   vars:
     # We avoid persisting the SSH host fingerprint to avoid errors caused by the floating IP
     # Jumping between the different Load Balancer Raspberry PIs
-    ansible_ssh_common_args: "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ForwardAgent=yes -o ProxyCommand=\"ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -W %h:%p -q pi@{{ lb_external_floating_ip }}\""
+    ansible_ssh_common_args: "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ForwardAgent=yes"
+    enable_sda_trim: no
   children:
     master:
     node:
@@ -71,45 +70,4 @@ node:
     node1:
       ansible_host: node1.local
 
-load_balancer:
-  vars:
-    # List of ports and destination IP that Load Balancer forward to internal network
-    haproxy_k3s_redirects:
-      - name: k3s_api
-        target_hostnames:
-          - "master1.local"
-          - "master2.local"
-          - "master3.local"
-        ports:
-          - 6443
-      - name: k3s_ingress_gateway
-        target_ips:
-          - '10.0.1.1'
-        ports:
-          - 80
-          - 443
-  hosts:
-    # List of Load Balancer Raspberry PIs
-    lb1:
-      ansible_host: lb1.local
-      lb_priority: 100 # Priority for Floating IP assignation
-      internal_cidr: 10.0.0.2/16 # We need a static IP configuration
-    lb2:
-      ansible_host: lb2.local
-      lb_priority: 99
-      internal_cidr: 10.0.0.3/16
-
-### Bootstrap inventory
-
-raw_pi:
-  # We avoid persisting the SSH host fingerprint because the `raspberrypi.local` hostname
-  # is assigned to all Raspberry PIs as default and it would cause errors
-  vars:
-    ansible_ssh_common_args: "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ForwardAgent=yes {{ ('-o ProxyCommand=\"ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -W %h:%p -q pi@' + lb_external_floating_ip + '\"') if nested_pi is defined else '' }}"
-    # `enable_sda_trim` is an EXPERIMENTAL FEATURE, it will enable TRIM on /dev/sda if found on `Bus 002 Device 002`
-    # using `lsusb`. IT CAN DESTROY THE FIRMWARE OF YOUR USB ADAPTER IF TRIM NOT COMPLETELY SUPPORTED
-    enable_sda_trim: no
-  hosts:
-    raspberrypi:
-      ansible_host: raspberrypi.local
 ...
