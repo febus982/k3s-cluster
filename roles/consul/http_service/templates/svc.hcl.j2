@@ -1,9 +1,0 @@
-services {
-  id = "{{ service_name }}"
-  name = "{{ service_name }}",
-  port = {{ service_port }},
-  check {
-    args = ["curl", "localhost:{{ service_port }}"],
-    interval = "3s"
-  }
-}

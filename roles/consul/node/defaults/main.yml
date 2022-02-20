@@ -1,6 +1,0 @@
----
-consul_master: no
-consul_arch_map:
-  aarch64: "arm64"
-  armv7l: "armhfv6"
-...

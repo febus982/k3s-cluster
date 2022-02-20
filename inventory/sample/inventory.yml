@@ -7,15 +7,7 @@ all:
     #       It's still preferred to rely on avahi .local hostnames
     network_domain: "dmz.example.com"
     # Floating IP configuration
-    lb_internal_floating_ip: "10.0.0.1"
-    lb_internal_interface: "eth0"
-    lb_external_floating_ip: "192.168.50.150"
-    lb_external_interface: "wlan0"
-    consul:
-      enabled: yes
-      gossip_secret: "+7ZxMaGbyg0wSbwBIWLAa2puYjompsMMl37paPKeiLs=" # Generate your own secret using `consul keygen` command
-      domain: "consul" # Consul service discovery domain
-      version: "1.10.3"
+    control_plane_floating_ip: "10.0.0.1"
     # Uncomment to use external datastore HA: https://rancher.com/docs/k3s/latest/en/installation/ha/
 #    k3s_datastore_endpoint: 'http://192.168.50.100:2379'
     k3s_token: "somesecrettoken"
