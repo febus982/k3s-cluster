@@ -1,0 +1,50 @@
+---
+- name: Apply RBAC
+  command:
+    cmd: kubectl apply -f https://kube-vip.io/manifests/rbac.yaml
+
+# Note: Shouldn't ctr auto-pull the image? Without this the system throws an error
+- name: Pull kube-vip image
+  shell:
+    cmd:
+      ctr i pull
+      ghcr.io/kube-vip/kube-vip:$(curl -sL https://api.github.com/repos/kube-vip/kube-vip/releases | jq -r ".[0].name")
+  become: yes
+
+- name: Generate kube-vip manifests
+  shell:
+    cmd: >
+      ctr run
+      --rm --net-host
+      ghcr.io/kube-vip/kube-vip:$(curl -sL https://api.github.com/repos/kube-vip/kube-vip/releases | jq -r ".[0].name")
+      vip /kube-vip
+      manifest daemonset
+      --interface eth0
+      --address {{ control_plane_floating_ip }}
+      --inCluster
+      --taint
+      --controlplane
+      --services
+      --arp
+      --leaderElection > ./kube-vip.yaml
+  become: yes
+
+- name: Apply RBAC
+  command:
+    cmd: kubectl apply -f ./kube-vip.yaml
+
+- name: Copy ConfigMap
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/kube-vip-config.yml"
+    dest: ./kube-vip-config.yml
+
+# Add in flux repository
+#- name: Apply ConfigMap
+#  command:
+#    cmd: kubectl apply -f ./kube-vip-config.yml
+#
+#- name: Apply cloud controller
+#  command:
+#    cmd: kubectl apply -f https://raw.githubusercontent.com/kube-vip/kube-vip-cloud-provider/main/manifest/kube-vip-cloud-controller.yaml
+
+

@@ -1,39 +1,41 @@
 ---
-- hosts: k3s_cluster
-  gather_facts: yes
-  become: no
-  roles:
-    - role: k3s/prereq
-    - role: apt_dependencies
-    - role: reboot_and_reconnect
-    - role: ntp
-    - role: reboot_and_reconnect
+#- hosts: k3s_cluster
+#  gather_facts: yes
+#  become: no
+#  roles:
+#    - role: k3s/prereq
+#    - role: apt_dependencies
+#    - role: reboot_and_reconnect
+#    # ntp needs to be installed separately because it errors out
+#    # when the previous roles do update the kernel
+#    - role: ntp
+#    - role: reboot_and_reconnect
 
 - hosts: master
   gather_facts: yes
   become: no
-  # We need to init the first master separately
+  # It's best to init masters separately so that no race conditions happen
   serial: 1
   roles:
     - role: k3s/master
       become: yes
 
-- hosts: node
-  gather_facts: yes
-  become: no
-  roles:
-    - role: k3s/agent
-      become: yes
-
-# Find an appropriate host to run this :/
-- hosts: master1
-  gather_facts: yes
-  become: no
-  roles:
-    - role: coredns
-      when: not k3s_components.coredns and k3s_reinstall is not defined
-    - role: fluxcd
-      when: flux.enabled and k3s_reinstall is not defined
-    - role: vertical_autoscaler
-      when: vertical_autoscaler.enabled and k3s_reinstall is not defined
+#- hosts: node
+#  gather_facts: yes
+#  become: no
+#  roles:
+#    - role: k3s/agent
+#      become: yes
+#
+## Find an appropriate host to run this :/
+#- hosts: master1
+#  gather_facts: yes
+#  become: no
+#  roles:
+#    - role: coredns
+#      when: not k3s_components.coredns and k3s_reinstall is not defined
+#    - role: fluxcd
+#      when: flux.enabled and k3s_reinstall is not defined
+#    - role: vertical_autoscaler
+#      when: vertical_autoscaler.enabled and k3s_reinstall is not defined
 ...

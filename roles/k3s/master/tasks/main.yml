@@ -9,19 +9,12 @@
     src: "{{ role_path }}/templates/config.yaml.j2"
     dest: /etc/rancher/k3s/config.yaml
 
-- name: Check if HA mode with integrated datastor
+- name: Check if HA mode with integrated datastore
   set_fact:
-    ha_integrated_datastore: groups['master'] | length | int > 1 and k3s_datastore_endpoint is not defined
+    ha_integrated_datastore: "{{ groups['master'] | length | int > 1 and k3s_datastore_endpoint is not defined }}"
 
-- name: Get first master hostname
-  set_fact:
-    first_master_hostname: "{{ hostvars[groups['master'][0]]['ansible_host'] }}"
-
-- name: Install K3S Master (Single master or no integrated datastore)
-  shell:
-    cmd: "curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC=server sh -"
-    creates: /etc/rancher/k3s/k3s.yaml
-  when: not ha_integrated_datastore
+- debug:
+    var: ha_integrated_datastore
 
 - name: Check if cluster has been initialised
   stat:
@@ -33,28 +26,35 @@
 # Note: add option to force reinstallation
 - name: Check if cluster needs initialisation
   set_fact:
-    cluster_needs_init: "{{ not node_token_stat_result.stat.exists or k3s_reinstall is defined }}"
+    cluster_needs_init: "{{ not node_token_stat_result.stat.exists }}"
 
-#- debug:
-#    var: node_token_stat_result.stat.exists
-#
-#- debug:
-#    var: cluster_needs_init
+- debug:
+    var: node_token_stat_result.stat.exists
 
-- name: Install K3S Master (Integrated datastore mode)
+- debug:
+    var: cluster_needs_init
+
+- name: Install K3S Master (HA with integrated datastore)
   shell:
     cmd: >
       curl -sfL https://get.k3s.io |
-      {{ 'K3S_CLUSTER_INIT=true' if cluster_needs_init else 'K3S_URL=https://' + lb_internal_floating_ip + ':6443' }}
+      {{ 'K3S_CLUSTER_INIT=true' if cluster_needs_init else 'K3S_URL=https://' + control_plane_floating_ip + ':6443' }}
       INSTALL_K3S_EXEC=server
       sh -
     creates: /etc/rancher/k3s/k3s.yaml
   when: ha_integrated_datastore
 
+- name: Install K3S Master (Single master or HA with external datastore)
+  shell:
+    cmd: "curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC=server sh -"
+    creates: /etc/rancher/k3s/k3s.yaml
+  when: not ha_integrated_datastore
+
 - name: Wait for K3S config
   wait_for:
     path: /etc/rancher/k3s/k3s.yaml
 
+##### Persist node-token file (necessary for agent init)
 - name: Fetch node-token
   ansible.builtin.fetch:
     src: /var/lib/rancher/k3s/server/node-token
@@ -63,7 +63,11 @@
   become: true
   when: cluster_needs_init
 
-#### External kubeconfig
+- include_role:
+    name: kube-vip
+  when: cluster_needs_init
+
+##### Recover external kubeconfig
 - name: Copy kubeconfig file to tmp directory
   copy:
     src: /etc/rancher/k3s/k3s.yaml
@@ -71,10 +75,10 @@
     remote_src: yes
   when: cluster_needs_init
 
-- name: "Replace https://localhost:6443 with https://{{ lb_external_floating_ip }}:6443"
+- name: "Replace https://localhost:6443 with https://{{ control_plane_floating_ip }}:6443"
   command: >-
     k3s kubectl config set-cluster default
-      --server=https://{{ lb_external_floating_ip }}:6443
+      --server=https://{{ control_plane_floating_ip }}:6443
       --kubeconfig /tmp/kubeconfig
   changed_when: true
   when: cluster_needs_init

@@ -5,8 +5,7 @@ datastore-endpoint: "{{ k3s_datastore_endpoint }}"
 {% endif %}
 token: "{{ k3s_token }}"
 tls-san:
-  - "{{ lb_internal_floating_ip }}"
-  - "{{ lb_external_floating_ip }}"
+  - "{{ control_plane_floating_ip }}"
 disable:
   {{ "- traefik" if not k3s_components['traefik'] else "" }}
   {{ "- servicelb" if not k3s_components['servicelb'] else "" }}

@@ -9,6 +9,7 @@
     cmd: "kubectl delete crd helmchartconfigs.helm.cattle.io"
   ignore_errors: yes
 
+# curl -sL https://api.github.com/repos/fluxcd/flux2/releases | jq -r ".[0].name"
 - name: Download flux cli
   ansible.builtin.unarchive:
     src: "https://github.com/fluxcd/flux2/releases/download/v{{ flux.version }}/flux_{{ flux.version }}_linux_arm.tar.gz"

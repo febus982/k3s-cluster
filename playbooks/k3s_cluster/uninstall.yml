@@ -1,13 +1,13 @@
 ---
-- hosts: node
-  gather_facts: yes
-  become: no
-  roles:
-    - role: k3s/uninstall
-      vars:
-        master: no
-      become: yes
-      ignore_errors: yes
+#- hosts: node
+#  gather_facts: yes
+#  become: no
+#  roles:
+#    - role: k3s/uninstall
+#      vars:
+#        master: no
+#      become: yes
+#      ignore_errors: yes
 
 - hosts: master
   gather_facts: yes
