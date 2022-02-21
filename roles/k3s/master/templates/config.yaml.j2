@@ -6,6 +6,9 @@ datastore-endpoint: "{{ k3s_datastore_endpoint }}"
 token: "{{ k3s_token }}"
 tls-san:
   - "{{ control_plane_floating_ip }}"
+{% for address in k3s_additional_tls_san %}
+  - "{{ address }}"
+{% endfor %}
 disable:
   {{ "- traefik" if not k3s_components['traefik'] else "" }}
   {{ "- servicelb" if not k3s_components['servicelb'] else "" }}

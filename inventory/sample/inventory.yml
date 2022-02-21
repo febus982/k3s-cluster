@@ -11,6 +11,9 @@ all:
     # Uncomment to use external datastore HA: https://rancher.com/docs/k3s/latest/en/installation/ha/
 #    k3s_datastore_endpoint: 'http://192.168.50.100:2379'
     k3s_token: "somesecrettoken"
+    # Uncomment to add additional hostnames or IP as a Subject Alternative Name in the TLS cert
+#    k3s_additional_tls_san:
+#      - "cluster.example.com"
     # K3S components: https://rancher.com/docs/k3s/latest/en/installation/install-options/server-config/#kubernetes-components
     k3s_components:
       coredns: no # We'll install a customised CoreDNS to be able to customise the config and manage it in Flux repository
