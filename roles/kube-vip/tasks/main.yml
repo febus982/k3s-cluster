@@ -38,13 +38,18 @@
     src: "{{ role_path }}/files/kube-vip-config.yml"
     dest: ./kube-vip-config.yml
 
+- name: Copy cloud controller
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/kube-vip-cloud-controller.yml"
+    dest: ./kube-vip-cloud-controller.yml
+
 # Add in flux repository
-#- name: Apply ConfigMap
-#  command:
-#    cmd: kubectl apply -f ./kube-vip-config.yml
-#
-#- name: Apply cloud controller
-#  command:
-#    cmd: kubectl apply -f https://raw.githubusercontent.com/kube-vip/kube-vip-cloud-provider/main/manifest/kube-vip-cloud-controller.yaml
+- name: Apply ConfigMap
+  command:
+    cmd: kubectl apply -f ./kube-vip-config.yml
+
+- name: Apply cloud controller
+  command:
+    cmd: kubectl apply -f ./kube-vip-cloud-controller.yml
 
 
