@@ -1,0 +1,13 @@
+---
+# Find an appropriate host to run this :/
+- hosts: master1
+  gather_facts: yes
+  become: no
+  roles:
+    - role: coredns
+      when: not k3s_components.coredns and k3s_reinstall is not defined
+    - role: fluxcd
+      when: flux.enabled and k3s_reinstall is not defined
+    - role: vertical_autoscaler
+      when: vertical_autoscaler.enabled and k3s_reinstall is not defined
+...
