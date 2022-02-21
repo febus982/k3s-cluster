@@ -24,7 +24,7 @@ all:
     # We use FluxCD and GitHub to deploy the other components: https://fluxcd.io/docs/
     flux:
       enabled: yes
-      version: "0.17.2"
+      version: "0.27.0"
       repository_owner: "febus982"
       repository_name: "k3s-cluster-flux-sample" # You should fork/copy content from https://github.com/febus982/k3s-cluster-flux-sample
       cluster_path: "clusters/k3s-pi"
