@@ -27,9 +27,9 @@ all:
       cluster_path: "clusters/k3s-pi"
       github_personal_account: yes # If the repository owner is a GitHub Organisation set this to `no`
       github_personal_token: "<personal_token>" # A personal token is necessary, check necessary permissions here: https://fluxcd.io/docs/installation/#github-and-github-enterprise
-    vertical_autoscaler: # Note: ARM64 support is not yet ready, should be with next release.
-      enabled: no
-      version: "0.9.2"
+    vertical_autoscaler:
+      enabled: yes
+      version: "0.10.0"
   children:
     k3s_cluster:
 
