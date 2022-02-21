@@ -1,4 +1,4 @@
 ---
 server: "https://{{ control_plane_floating_ip }}:6443"
-token-file: "/etc/rancher/k3s/node-token"
+token: "{{ k3s_token }}"
 ...
