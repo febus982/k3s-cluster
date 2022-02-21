@@ -29,9 +29,6 @@
     cluster_needs_init: "{{ not node_token_stat_result.stat.exists }}"
 
 - debug:
-    var: node_token_stat_result.stat.exists
-
-- debug:
     var: cluster_needs_init
 
 - name: Install K3S Master (HA with integrated datastore)
