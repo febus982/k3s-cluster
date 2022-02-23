@@ -4,7 +4,8 @@ metadata:
   name: kubevip
   namespace: kube-system
 data:
-  range-global: 10.0.1.1-10.0.1.254
+  cidr-global: 10.0.1.128/25
+  cidr-istio-ingress: 10.0.1.1/32                      # Range-based IP range for use in the development Namespace
 #  cidr-default: 192.168.0.200/29                      # CIDR-based IP range for use in the default Namespace
 #  range-development: 192.168.0.210-192.168.0.219      # Range-based IP range for use in the development Namespace
 #  cidr-finance: 192.168.0.220/29,192.168.0.230/29     # Multiple CIDR-based ranges for use in the finance Namespace
