@@ -28,8 +28,10 @@ all:
       repository_owner: "febus982"
       repository_name: "k3s-cluster-flux-sample" # You should fork/copy content from https://github.com/febus982/k3s-cluster-flux-sample
       cluster_path: "clusters/k3s-pi"
-      github_personal_account: yes # If the repository owner is a GitHub Organisation set this to `no`
       github_personal_token: "<personal_token>" # A personal token is necessary, check necessary permissions here: https://fluxcd.io/docs/installation/#github-and-github-enterprise
+      github_personal_account: yes # If the repository owner is a GitHub Organisation set this to `no`
+      github_teams: # If the repository owner is a GitHub Organisation, you need a list of teams to give maintainer access to
+        - infrastructure
     vertical_autoscaler:
       enabled: yes
       version: "0.10.0"

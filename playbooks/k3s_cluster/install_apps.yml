@@ -3,11 +3,13 @@
 - hosts: master1
   gather_facts: yes
   become: no
+  vars:
+    app: all
   roles:
     - role: coredns
-      when: not k3s_components.coredns and k3s_reinstall is not defined
+      when: app in ('all', 'coredns') and not k3s_components.coredns
     - role: fluxcd
-      when: flux.enabled and k3s_reinstall is not defined
+      when: app in ('all', 'fluxcd') and flux.enabled
     - role: vertical_autoscaler
-      when: vertical_autoscaler.enabled and k3s_reinstall is not defined
+      when: app in ('all', 'vertical_autoscaler') and vertical_autoscaler.enabled
 ...

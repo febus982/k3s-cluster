@@ -27,7 +27,13 @@
       --repository={{ flux.repository_name }}
       --path={{ flux.cluster_path }}
       --read-write-key
-      {{ '--personal' if flux.github_personal_account else '' }}
+      {% if flux.github_personal_account %}
+      --personal
+      {% else %}
+      {% for team in flux.github_teams %}
+      --team={{ team }}
+      {% endfor %}
+      {% endif %}
   environment:
     GITHUB_TOKEN: "{{ flux.github_personal_token }}"
 ...
