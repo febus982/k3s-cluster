@@ -24,6 +24,7 @@
       --inCluster
       --taint
       --controlplane
+      --enableLoadBalancer
       --services
       --arp
       --leaderElection > ./kube-vip.yaml
