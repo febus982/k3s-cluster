@@ -9,7 +9,7 @@
     - role: coredns
       when: app in ('all', 'coredns') and not k3s_components.coredns
     - role: fluxcd
-      when: app in ('all', 'fluxcd') and flux.enabled
+      when: app in ('all', 'fluxcd') and fluxcd.enabled
     - role: vertical_autoscaler
       when: app in ('all', 'vertical_autoscaler') and vertical_autoscaler.enabled
     - role: kube-vip

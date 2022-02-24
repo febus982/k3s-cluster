@@ -26,7 +26,7 @@ all:
         cidr-finance: 192.168.0.220/29,192.168.0.230/29     # Multiple CIDR-based ranges for use in the finance Namespace
         cidr-global: 192.168.0.240/29                       # CIDR-based range which can be used in any Namespace
     # We use FluxCD and GitHub to deploy the other components: https://fluxcd.io/docs/
-    flux:
+    fluxcd:
       enabled: yes
       version: "0.27.0"
       repository_owner: "febus982"

@@ -44,7 +44,7 @@
     src: "{{ role_path }}/files/kube-vip-cloud-controller.yml"
     dest: ./kube-vip-cloud-controller.yml
 
-# Add in flux repository
+# Add in fluxcd repository
 - name: Apply ConfigMap
   command:
     cmd: kubectl apply -f ./kube-vip-config.yml

@@ -10,9 +10,9 @@
   ignore_errors: yes
 
 # curl -sL https://api.github.com/repos/fluxcd/flux2/releases | jq -r ".[0].name"
-- name: Download flux cli
+- name: Download fluxcd cli
   ansible.builtin.unarchive:
-    src: "https://github.com/fluxcd/flux2/releases/download/v{{ flux.version }}/flux_{{ flux.version }}_linux_arm.tar.gz"
+    src: "https://github.com/fluxcd/flux2/releases/download/v{{ fluxcd.version }}/flux_{{ fluxcd.version }}_linux_arm.tar.gz"
     dest: ~{{ ansible_user }}
     remote_src: yes
   become: yes
@@ -23,17 +23,17 @@
       ~{{ ansible_user }}/flux bootstrap github
       --kubeconfig /etc/rancher/k3s/k3s.yaml
       --components-extra=image-reflector-controller,image-automation-controller
-      --owner={{ flux.repository_owner }}
-      --repository={{ flux.repository_name }}
-      --path={{ flux.cluster_path }}
+      --owner={{ fluxcd.repository_owner }}
+      --repository={{ fluxcd.repository_name }}
+      --path={{ fluxcd.cluster_path }}
       --read-write-key
-      {% if flux.github_personal_account %}
+      {% if fluxcd.github_personal_account %}
       --personal
       {% else %}
-      {% for team in flux.github_teams %}
+      {% for team in fluxcd.github_teams %}
       --team={{ team }}
       {% endfor %}
       {% endif %}
   environment:
-    GITHUB_TOKEN: "{{ flux.github_personal_token }}"
+    GITHUB_TOKEN: "{{ fluxcd.github_personal_token }}"
 ...
