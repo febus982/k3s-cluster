@@ -35,8 +35,8 @@
     cmd: kubectl apply -f ./kube-vip.yaml
 
 - name: Copy ConfigMap
-  ansible.builtin.copy:
-    src: "{{ role_path }}/files/kube-vip-config.yml"
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/kube-vip-config.yml.j2"
     dest: ./kube-vip-config.yml
 
 - name: Copy cloud controller

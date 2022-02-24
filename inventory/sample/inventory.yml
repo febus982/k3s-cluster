@@ -21,6 +21,14 @@ all:
       traefik: no # We'll use nginx-ingress, to maintain control over the installation options (assign the correct IP address to the service)
       local-storage: yes # Local storage is not great for persistent volumes, you should install a better one if possible
       metrics-server: yes
+    # The cloud controller takes care of giving IP addresses LoadBalancer services
+    kube_vip_cloud_controller:
+      enabled: yes
+      ip_classes:
+        cidr-default: 192.168.0.200/29                      # CIDR-based IP range for use in the default Namespace
+        range-development: 192.168.0.210-192.168.0.219      # Range-based IP range for use in the development Namespace
+        cidr-finance: 192.168.0.220/29,192.168.0.230/29     # Multiple CIDR-based ranges for use in the finance Namespace
+        cidr-global: 192.168.0.240/29                       # CIDR-based range which can be used in any Namespace
     # We use FluxCD and GitHub to deploy the other components: https://fluxcd.io/docs/
     flux:
       enabled: yes

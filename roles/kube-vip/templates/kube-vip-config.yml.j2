@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kubevip
+  namespace: kube-system
+data:
+{% for key, value in kube_vip_cloud_controller.ip_classes.items() %}
+  {{ key }}: {{ value }}
+{% endfor %}
