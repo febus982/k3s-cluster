@@ -30,7 +30,7 @@
       --leaderElection > ./kube-vip.yaml
   become: yes
 
-- name: Apply RBAC
+- name: Apply kube-vip manifests
   command:
     cmd: kubectl apply -f ./kube-vip.yaml
 
