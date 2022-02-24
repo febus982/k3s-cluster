@@ -12,4 +12,6 @@
       when: app in ('all', 'fluxcd') and flux.enabled
     - role: vertical_autoscaler
       when: app in ('all', 'vertical_autoscaler') and vertical_autoscaler.enabled
+    - role: kube-vip
+      when: app == 'kube-vip'
 ...
