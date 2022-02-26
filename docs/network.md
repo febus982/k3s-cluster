@@ -6,43 +6,36 @@ Example configuration:
 
 ``` mermaid
 graph TD
-    LAN([External Network])
-    LB1["192.168.50.30 (DHCP)"<br />LB1<br />10.0.0.2]
-    LB2["192.168.50.31 (DHCP)"<br />LB2<br />10.0.0.3]
-    MASTER1[MASTER1]
-    MASTER2[MASTER2]
-    MASTER3[MASTER3]
-    NODE1[NODE1]
-    INTERNAL_NAS[(NAS)]
-    INTERNAL_SUBNET([Internal Subnet])
-    KUBE_API{{K3S API Service}}
-    KUBE_SVC{{K3S LoadBalancer Service}}
-    INTERNAL_STORAGE{{Storage Service}}
-    LAN <==>|Floating External IP<br />192.168.50.150| LB1
-    LAN <-.-> LB2
-    LB1 <==>|Floating Internal IP<br />10.0.0.1| INTERNAL_SUBNET
-    LB2 <-.-> INTERNAL_SUBNET
-    INTERNAL_SUBNET <==> KUBE_API & KUBE_SVC & INTERNAL_STORAGE
+    INTERNET([INTERNET])
+    LAN(["192.168.100.1"<br />LAN GATEWAY])
+    ROUTER(["192.168.100.100<br />10.10.0.1"<br />INTERNAL ROUTER])
+    MASTER1["10.10.0.11"<br />MASTER1]
+    MASTER2["10.10.0.12"<br />MASTER2]
+    MASTER3["10.10.0.13"<br />MASTER3]
+    NODE1["10.10.0.30 (DHCP)"<br />NODE1]
+    INTERNAL_NAS[("10.10.0.50"<br />NFS STORAGE)]
+    KUBE_API{{"10.10.0.2 (Floating IP)<br />" K3S API Service}}
+    KUBE_SVC{{"10.10.1.1"<br />K3S Ingress Service}}
+    INTERNET <==> LAN
+    LAN <==> ROUTER
+    ROUTER <==> |port 6443| KUBE_API
+    ROUTER <==> |port 80, 443| KUBE_SVC
     KUBE_API <==> MASTER1 & MASTER2 & MASTER3
     KUBE_SVC <==> NODE1
-    INTERNAL_STORAGE <==> INTERNAL_NAS
+    ROUTER <==> |port 111,2049| INTERNAL_NAS
 ```
 
-## Load balancers
+## IP Ranges setup explained
 
-The Load Balancer PIs will use the Wi-Fi interface for internet connectivity, while the ethernet network is used
-for communication over the internal subnet.
+The example uses a dedicated router to keep the internal network separate from the external one,
+isolating the internal network from the external one. _(The implementation does not cover the
+isolation of the network, which is entirely optional.)_
 
-The Load Balancers will use the following IP addresses on the Wi-Fi interface:
+The internal network uses the CIDR `10.10.0.0/16` and the following range design can be implemented
+using the playbooks:
 
-1. IP address for each Load Balancer PI, assigned by the DHCP server present on the WiFi network
-3. A floating IP address for both Load Balancers, manually configured in the ansible inventory
-
-## Internal IP Ranges setup
-
-The internal network uses the CIDR `10.0.0.0/16` and the following range design is implemented in the playbooks:
-
-- `10.0.0.1`: Load Balancer internal floating IP, used as gateway and DNS resolver
-- `10.0.0.2 - 10.0.0.254`: reserved for static IP addresses assigned to physical machines in the internal network (e.g. Load Balancer IPs)
-- `10.0.1.1 - 10.0.1.254`: reserved for K3S services of type LoadBalancer
-- `10.0.2.1 - 10.0.255.254`: DHCP range served over the ethernet interface
+- `10.10.0.1`: Router internal IP, used as gateway and DNS resolver.
+- `10.10.0.2`: Control plane floating IP, the router forwards port 6443 to this address.
+- `10.10.0.3 - 10.10.0.254`: reserved for static IP addresses assigned to physical machines (e.g. an NFS storage)
+- `10.10.1.1 - 10.10.1.254`: reserved for K3S services of type LoadBalancer (e.g. the Ingress controller service)
+- `10.10.2.1 - 10.10.255.254`: DHCP range for physical machines

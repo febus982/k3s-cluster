@@ -1,4 +1,4 @@
-# K3S Nodes PI setup
+# Legacy documentation - K3S Nodes PI setup
  
 ???+ error "Legacy documentation"
     This the legacy documentation. [Click here for the updated one](/)

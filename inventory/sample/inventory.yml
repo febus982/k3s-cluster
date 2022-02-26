@@ -3,7 +3,7 @@ all:
   vars:
     ansible_user: pi
     # Floating IP configuration
-    control_plane_floating_ip: "10.0.0.1"
+    control_plane_floating_ip: "192.168.0.2"
     # Uncomment to use external datastore HA: https://rancher.com/docs/k3s/latest/en/installation/ha/
 #    k3s_datastore_endpoint: 'http://192.168.50.100:2379'
     k3s_token: "somesecrettoken"
@@ -21,10 +21,11 @@ all:
     kube_vip_cloud_controller:
       enabled: yes
       ip_classes:
-        cidr-default: 192.168.0.200/29                      # CIDR-based IP range for use in the default Namespace
-        range-development: 192.168.0.210-192.168.0.219      # Range-based IP range for use in the development Namespace
-        cidr-finance: 192.168.0.220/29,192.168.0.230/29     # Multiple CIDR-based ranges for use in the finance Namespace
-        cidr-global: 192.168.0.240/29                       # CIDR-based range which can be used in any Namespace
+        cidr-ingress-nginx: 192.168.0.3/32                   # CIDR-based single ip for ingress-nginx Namespace
+        cidr-global: 192.168.0.128/25                        # CIDR-based range which can be used in any Namespace
+#        cidr-default: 192.168.0.200/29                      # CIDR-based IP range for use in the default Namespace
+#        range-development: 192.168.0.210-192.168.0.219      # Range-based IP range for use in the development Namespace
+#        cidr-finance: 192.168.0.220/29,192.168.0.230/29     # Multiple CIDR-based ranges for use in the finance Namespace
     # We use FluxCD and GitHub to deploy the other components: https://fluxcd.io/docs/
     fluxcd:
       enabled: yes

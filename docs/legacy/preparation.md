@@ -1,4 +1,4 @@
-# Preparation
+# Legacy documentation - Preparation
 
 ???+ error "Legacy documentation"
     This the legacy documentation. [Click here for the updated one](/)

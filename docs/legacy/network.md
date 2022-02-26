@@ -1,4 +1,4 @@
-# Network design
+# Legacy documentation - Network design
 
 ???+ error "Legacy documentation"
     This the legacy documentation. [Click here for the updated one](/)

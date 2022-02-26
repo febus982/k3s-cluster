@@ -1,4 +1,4 @@
-# Maintenance operations
+# Legacy documentation - Maintenance operations
 
 ???+ error "Legacy documentation"
     This the legacy documentation. [Click here for the updated one](/)

@@ -2,28 +2,30 @@
 
 This requires the Load Balancer PIs to be installed and running. Refer to [Load balancers setup](load_balancers.md).
 
-## PI Network setup
+## Bootstrap PIs
 
-Same as we did for load balancers we turn on one PI at a time. The PIs have to be connected to the ethernet interface so
-that they will receive an IP address from the load balancers.
-
-Start the PI, it will become available on `raspberrypi.local` hostname. Run:
+First thing we want to do is bootstrap the PIs:
 
 ```bash
-ssh-copy-id -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
- -o ProxyCommand="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -W %h:%p -q pi@192.168.50.150" \
- pi@raspberrypi.local
+pipenv run ansible-requirements
+pipenv run k3s_bootstrap
 ```
 
-Note: The `ssh-copy-id` command has different options from the same command in the load balancer setup.
+This currently does only the file-system expansion.
 
-then:
+## Master nodes PI network setup
 
-```bash
-pipenv run k3s_bootstrap -e new_hostname=master1
-```
+This step is necessary if you use the default setup: Highly available control plane without an external datastore.
 
-Repeat the same for all the nodes defined in the ansible inventory, with the proper hostname.
+In this scenario K3S will create an highly available etcd setup, and **this needs your master nodes
+having a static IP address**. (K3S documentation doesn't specify this)
+
+The best way of doing this is actually in your router _(in this way should you need
+to reinstall the nodes from scratch they will get the same IP address without additional actions)_
+
+If you can't do this, you can still setup the networking using the
+[raspi-config](https://www.raspberrypi.com/documentation/computers/configuration.html#the-raspi-config-tool)
+tool provided by raspbian.
 
 ## K3S Nodes PIs provisioning
 
@@ -35,11 +37,14 @@ pipenv run k3s_install
 As soon as the first master node is running a `kubeconfig.yml` file will be generated in the root directory of
 the project, ready to be used by `kubectl` command.
 
-When all the nodes are installed you should be able to access the Consul UI to monitor nodes and services on [http://192.168.50.150:8500/ui](http://192.168.50.150:8500/ui).
+??? warning "K3S Reinstall"
+    The installation process creates also a file named `node-token`, together with the `kubeconfig.yml` file.
+    If you need to reinstall K3S from scratch, after having uninstalled all nodes, **make sure you
+    delete the file** so that the next installation knows it needs to initialise a new cluster.
 
 ### Notes
 
-- the step `TASK [apt_dependencies : Run apt dist-upgrade]` might take a while (~10-15 minutes if system is not up to date)
+- the step `TASK [apt_dependencies : Run apt dist-upgrade]` might take a while (~10-15 minutes if system is very outdated date)
 - the step `TASK [k3s_script : Install K3S]` might take a while (~3-5 minutes on PI4)
 
 ## K3S Nodes PIs uninstall

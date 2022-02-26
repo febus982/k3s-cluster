@@ -3,9 +3,9 @@ repo_url: https://github.com/febus982/k3s-cluster
 repo_name: febus982/k3s-cluster
 nav:
   - Home: index.md
+  - Improvements since the first version: improvements_since_first_version.md
   - Network design: network.md
   - Preparation: preparation.md
-  - Load balancers setup: load_balancers.md
   - K3S nodes setup: k3s_nodes.md
   - Maintenance operations: maintenance.md
   - Legacy documentation:

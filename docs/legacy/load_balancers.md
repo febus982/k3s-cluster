@@ -1,4 +1,4 @@
-# Load Balancer PI setup
+# Legacy documentation - Load Balancer PI setup
  
 ???+ error "Legacy documentation"
     This the legacy documentation. [Click here for the updated one](/)
