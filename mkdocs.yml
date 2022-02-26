@@ -8,9 +8,17 @@ nav:
   - Load balancers setup: load_balancers.md
   - K3S nodes setup: k3s_nodes.md
   - Maintenance operations: maintenance.md
+  - Legacy documentation:
+    - Introduction: legacy/index.md
+    - Network design: legacy/network.md
+    - Preparation: legacy/preparation.md
+    - Load balancers setup: legacy/load_balancers.md
+    - K3S nodes setup: legacy/k3s_nodes.md
+    - Maintenance operations: legacy/maintenance.md
 
 markdown_extensions:
   - pymdownx.snippets
+  - pymdownx.details
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
@@ -41,6 +49,9 @@ extra:
       link: https://github.com/febus982/flux-k3s-cluster
     - icon: fontawesome/brands/linkedin
       link: https://www.linkedin.com/in/federico-b-a0b78232/
+  version:
+    default: stable
+    provider: mike
 
 plugins:
   - search
