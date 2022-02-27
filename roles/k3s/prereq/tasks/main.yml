@@ -3,6 +3,17 @@
     msg: You can't run an an even number of masters without an external datastore
   when: (groups['master'] | length | int is divisibleby 2) and k3s_datastore_endpoint is not defined
 
+- name: Disable swapfile
+  shell:
+    cmd: dphys-swapfile swapoff && dphys-swapfile uninstall
+  become: yes
+
+- name: Disable swapfile service
+  ansible.builtin.systemd:
+    name: dphys-swapfile
+    state: stopped
+    enabled: no
+
 - name: Enable IPv4 forwarding
   sysctl:
     name: net.ipv4.ip_forward
