@@ -15,9 +15,9 @@
     enabled: no
   become: yes
 
-- name: Disable wpa_supplican
+- name: Disable wpa_supplicant
   ansible.builtin.systemd:
-    name: wpa_supplican
+    name: wpa_supplicant
     state: stopped
     enabled: no
   become: yes
