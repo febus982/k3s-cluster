@@ -1,4 +1,4 @@
-# K3S Nodes PI setup
+# K3S Nodes setup
 
 This requires the Load Balancer PIs to be installed and running. Refer to [Load balancers setup](load_balancers.md).
 
@@ -32,15 +32,30 @@ tool provided by raspbian.
 Run:
 ```bash
 pipenv run k3s_install
+pipenv run k3s_install_apps -e app=all
 ```
 
 As soon as the first master node is running a `kubeconfig.yml` file will be generated in the root directory of
 the project, ready to be used by `kubectl` command.
 
-??? warning "K3S Reinstall"
+??? warning "K3S Reinstallation"
     The installation process creates also a file named `node-token`, together with the `kubeconfig.yml` file.
     If you need to reinstall K3S from scratch, after having uninstalled all nodes, **make sure you
     delete the file** so that the next installation knows it needs to initialise a new cluster.
+
+??? "Application installation"
+    We install the apps separately, so we are able to reinstall or update them without having
+    tear down the whole cluster. The possible options for the `app` parameter are:
+
+    * `all`: This tries to install all the applications
+    * `coredns`: This tries to install coredns
+    * `fluxcd`: This tries to install coredns
+    * `kube-vip`: This tries to install kube-vip
+    * `vertical_autoscaler`: This tries to install coredns
+
+    The installed applications is still driven by the inventory setup. e.g. if fluxcd is disabled
+    it will not be installed, even if explicitely specified. _(This will prevent accidental conflicting apps)_
+
 
 ### Notes
 

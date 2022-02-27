@@ -58,7 +58,7 @@ master:
   vars:
     node_taint: "CriticalAddonsOnly=true:NoSchedule"
   hosts:
-  # List of master node Raspberry PIs and hostnames
+  # List of master node Raspberry PIs and hostnames (or ip addresses)
     master1:
       ansible_host: master1.local
     master2:
@@ -68,7 +68,7 @@ master:
 
 node:
   hosts:
-    # List of non-master node Raspberry PIs and hostnames
+    # List of non-master node Raspberry PIs and hostnames (or ip addresses)
     node1:
       ansible_host: node1.local
 

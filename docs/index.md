@@ -1,16 +1,15 @@
 # Introduction
 
-Welcome to the revamped implementation for a HA kubernetes cluster. If you're interested in the
-reasons and in the list of improvements just go to the [Improvements since the first version](improvements_since_first_version.md)
-section.
+Welcome to the revamped implementation to install a HA kubernetes cluster. If you're interested in the
+reasons and in the list of improvements since the  first version just go to the [relevant section](improvements_since_first_version.md).
 
 The legacy implementation is still available in the `legacy` branch in the git repository,
-and the documentation is in the 
+and the documentation is still available [here](legacy/index.md).
 
 ## The project
 
-Build a highly available Kubernetes cluster using K3S and Raspberry PIs. The goal is
-being able to easily install everything necessary using Ansible, literally a couple of commands.
+The goal is being able to easily install highly available Kubernetes cluster using K3S on Raspberry PIs
+using Ansible, literally a couple of commands.
 
 This project takes inspiration from the Ansible playbooks provided in [k3s-io/k3s-ansible](https://github.com/k3s-io/k3s-ansible)
 GitHub repository.
@@ -29,9 +28,10 @@ The ideal minimal setup would be composed of 4 different Raspberry PIs:
 It is possible to still run an HA setup using only 2 masters, but an [external datastore](https://rancher.com/docs/k3s/latest/en/installation/datastore)
 would be necessary.
 
-It is also possible to run pods on the masters, removing the taints on the control plane PIs in the ansible inventory.
-_(Running loads on Kubernetes masters is a bad practice that can make your cluster unresponsive. You'll also need
-more than 2GB of RAM if you still want to proceed in this way)_
+It is also possible to enable pod scheduling on the masters, removing the taints from
+the control plane PIs in the ansible inventory. _(Running loads on Kubernetes masters is
+a bad practice that can make your cluster unresponsive. You'll also need more than 2GB of
+RAM if you still want to proceed in this way)_
 
 ### Non HA Setup
 
