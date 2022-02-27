@@ -13,5 +13,5 @@
     - role: vertical_autoscaler
       when: app in ('all', 'vertical_autoscaler') and vertical_autoscaler.enabled
     - role: kube-vip
-      when: app == 'kube-vip' and not k3s_components.servicelb
+      when: app in ('all', 'kube-vip')
 ...

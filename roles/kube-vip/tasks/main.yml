@@ -34,23 +34,26 @@
   command:
     cmd: kubectl apply -f ./kube-vip.yaml
 
+##### Cloud controller setup ######
 - name: Copy ConfigMap
   ansible.builtin.template:
     src: "{{ role_path }}/templates/kube-vip-config.yml.j2"
     dest: ./kube-vip-config.yml
+  when: not k3s_components.servicelb
 
 - name: Copy cloud controller
   ansible.builtin.copy:
     src: "{{ role_path }}/files/kube-vip-cloud-controller.yml"
     dest: ./kube-vip-cloud-controller.yml
+  when: not k3s_components.servicelb
 
 # Add in fluxcd repository
 - name: Apply ConfigMap
   command:
     cmd: kubectl apply -f ./kube-vip-config.yml
+  when: not k3s_components.servicelb
 
 - name: Apply cloud controller
   command:
     cmd: kubectl apply -f ./kube-vip-cloud-controller.yml
-
-
+  when: not k3s_components.servicelb
