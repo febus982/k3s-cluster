@@ -20,10 +20,10 @@ The provided script has been tested on `arm64` Raspberry Pi OS using Raspberry P
 
 ### HA Setup
 
-The ideal minimal setup would be composed of 4 different Raspberry PIs:
+The ideal setup would be composed of 4+ different Raspberry PIs:
 
-- 3 Raspberry PI (2GB RAM minimum) would serve the function of Kubernetes masters, running only the control plane.
-- 1+ Raspberry PI (8GB RAM suggested) as node, to run your pods.
+- 3 Raspberry PI (2GB RAM minimum) would serve the function of Kubernetes master nodes, running only the control plane.
+- 1+ Raspberry PI (8GB RAM suggested) as node, to run your loads.
 
 It is possible to still run an HA setup using only 2 masters, but an [external datastore](https://rancher.com/docs/k3s/latest/en/installation/datastore)
 would be necessary.
