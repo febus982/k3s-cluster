@@ -4,7 +4,7 @@
   gather_facts: yes
   become: no
   vars:
-    app: all
+    app: none
   roles:
     - role: coredns
       when: app in ('all', 'coredns') and not k3s_components.coredns
