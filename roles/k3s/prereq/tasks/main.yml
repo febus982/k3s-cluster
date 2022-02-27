@@ -13,6 +13,7 @@
     name: dphys-swapfile
     state: stopped
     enabled: no
+  become: yes
 
 - name: Enable IPv4 forwarding
   sysctl:
