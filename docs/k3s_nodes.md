@@ -1,7 +1,5 @@
 # K3S Nodes setup
 
-This requires the Load Balancer PIs to be installed and running. Refer to [Load balancers setup](load_balancers.md).
-
 ## Bootstrap PIs
 
 First thing we want to do is bootstrap the PIs:
