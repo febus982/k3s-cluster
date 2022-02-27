@@ -33,7 +33,7 @@ servers:
       - name: prometheus
         parameters: 0.0.0.0:9153
       - name: forward
-        parameters: . 10.0.0.1
+        parameters: . 1.1.1.1
       - name: cache
         parameters: 30
       - name: loop
