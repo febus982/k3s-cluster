@@ -62,7 +62,7 @@
 
 - include_role:
     name: kube-vip
-  when: cluster_needs_init
+  when: cluster_needs_init and not k3s_components.servicelb
 
 ##### Recover external kubeconfig
 - name: Copy kubeconfig file to tmp directory
