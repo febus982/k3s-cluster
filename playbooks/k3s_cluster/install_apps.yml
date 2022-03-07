@@ -1,7 +1,7 @@
 ---
 # Find an appropriate host to run this :/
 - hosts: master1
-  gather_facts: yes
+  gather_facts: no
   become: no
   vars:
     app: none

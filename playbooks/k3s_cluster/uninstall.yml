@@ -1,6 +1,6 @@
 ---
 - hosts: node
-  gather_facts: yes
+  gather_facts: no
   become: no
   roles:
     - role: k3s/uninstall

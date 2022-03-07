@@ -1,6 +1,6 @@
 ---
 - hosts: k3s_cluster
-  gather_facts: yes
+  gather_facts: no
   become: no
   roles:
     - role: k3s/prereq
@@ -12,7 +12,7 @@
     - role: reboot_and_reconnect
 
 - hosts: master
-  gather_facts: yes
+  gather_facts: no
   become: no
   # It's best to init masters separately so that no race conditions happen
   serial: 1
@@ -21,7 +21,7 @@
       become: yes
 
 - hosts: node
-  gather_facts: yes
+  gather_facts: no
   become: no
   roles:
     - role: k3s/agent
