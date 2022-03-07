@@ -2,6 +2,8 @@
 write-kubeconfig-mode: "0644"
 {% if k3s_datastore_endpoint is defined %}
 datastore-endpoint: "{{ k3s_datastore_endpoint }}"
+{% else %}
+etcd-expose-metrics: true
 {% endif %}
 token: "{{ k3s_token }}"
 tls-san:
