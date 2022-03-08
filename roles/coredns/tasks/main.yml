@@ -30,7 +30,7 @@
     src: "{{ role_path }}/files/helm-values.yaml"
     dest: coredns-values.yaml
 
-- name: Install or upgrade {{ chartName }} helm chart
+- name: Install or upgrade coredns helm chart
   command: >
     helm --namespace=kube-system install coredns coredns/coredns --wait
     --kubeconfig /etc/rancher/k3s/k3s.yaml --create-namespace
