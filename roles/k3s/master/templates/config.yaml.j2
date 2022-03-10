@@ -20,4 +20,5 @@ disable:
 {% if node_taint is defined %}
 node-taint: "{{ node_taint }}"
 {% endif %}
+kube-apiserver-arg: "feature-gates=MixedProtocolLBService=true"
 ...
