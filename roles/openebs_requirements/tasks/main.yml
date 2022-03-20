@@ -1,0 +1,25 @@
+---
+- name: Install open-iscsi via apt
+  apt:
+    pkg:
+    - open-iscsi
+    state: latest
+  become: yes
+
+- name: Enable and restart open-iscsi
+  ansible.builtin.systemd:
+    name: open-iscsi
+    state: restarted
+    enabled: yes
+  become: yes
+
+- name: Load iscsi_tcp module
+  shell:
+    cmd: modprobe iscsi_tcp
+  become: yes
+
+- name: Auto-load iscsi_tcp module on startup
+  shell:
+    cmd: echo iscsi_tcp > /etc/modules-load.d/iscsi-tcp.conf
+  become: yes
+...

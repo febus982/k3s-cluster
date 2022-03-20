@@ -5,6 +5,7 @@
   roles:
     - role: k3s/prereq
     - role: apt_dependencies
+    - role: openebs_requirements
     - role: reboot_and_reconnect
     # ntp needs to be installed separately because it errors out
     # when the previous roles do update the kernel
