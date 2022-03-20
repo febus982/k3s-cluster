@@ -29,7 +29,7 @@ all:
     # We use FluxCD and GitHub to deploy the other components: https://fluxcd.io/docs/
     fluxcd:
       enabled: yes
-      version: "0.27.0"
+      version: "0.27.4"
       repository_owner: "febus982"
       repository_name: "k3s-cluster-flux-sample" # You should fork/copy content from https://github.com/febus982/k3s-cluster-flux-sample
       cluster_path: "clusters/k3s-pi"
@@ -37,6 +37,11 @@ all:
       github_personal_account: yes # If the repository owner is a GitHub Organisation set this to `no`
       github_teams: # If the repository owner is a GitHub Organisation, you need a list of teams to give maintainer access to
         - infrastructure
+      sops_decryption: # Creates the secret needed to decrypt secrets encrypted using SOPS: https://fluxcd.io/docs/guides/mozilla-sops/
+        enabled: no
+        type: gpg # Only gpg type is currently supported
+        secret_name: sops-gpg-secret
+        gpg_key_id: "gpg_key_name_or_id"
     vertical_autoscaler:
       enabled: yes
       version: "0.10.0"
