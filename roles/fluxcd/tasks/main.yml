@@ -43,7 +43,7 @@
       gpg --export-secret-keys --armor "{{ fluxcd.sops_decryption.gpg_key_id }}" |
       kubectl create secret generic {{ fluxcd.sops_decryption.secret_name }}
       --namespace=flux-system
-      --from-file=sops.asc=/dev/stdin -o yaml --dry-run=client -o yaml
+      --from-file=sops.asc=/dev/stdin -o yaml --dry-run=client
       | kubectl apply -f -
   delegate_to: localhost
   when: fluxcd.sops_decryption.enabled and fluxcd.sops_decryption.type == 'gpg'
