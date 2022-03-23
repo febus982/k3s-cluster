@@ -27,6 +27,12 @@ all:
 #        range-development: 192.168.0.210-192.168.0.219      # Range-based IP range for use in the development Namespace
 #        cidr-finance: 192.168.0.220/29,192.168.0.230/29     # Multiple CIDR-based ranges for use in the finance Namespace
     # We use FluxCD and GitHub to deploy the other components: https://fluxcd.io/docs/
+    openebs:
+      enabled: no  # Installs and enables requirements for openebs (open-iscsi)
+      loopback_volume:
+        create: no  # Creates a local file and adds it to fstab as a device to be used for openebs volumes
+        size_gb: 256
+        fs: ext4
     fluxcd:
       enabled: yes
       version: "0.27.4"

@@ -4,22 +4,39 @@
     pkg:
     - open-iscsi
     state: latest
-  become: yes
 
 - name: Enable and restart open-iscsi
   ansible.builtin.systemd:
     name: open-iscsi
     state: restarted
     enabled: yes
-  become: yes
 
 - name: Load iscsi_tcp module
   shell:
     cmd: modprobe iscsi_tcp
-  become: yes
 
 - name: Auto-load iscsi_tcp module on startup
   shell:
     cmd: echo iscsi_tcp > /etc/modules-load.d/iscsi-tcp.conf
-  become: yes
+
+- name: Create loopback device file
+  shell:
+    cmd: >
+      fallocate -l {{ openebs.loopback_volume.size_gb }}G /var/local/openebs_volume
+      && mkfs -t {{ openebs.loopback_volume.fs }} /var/local/openebs_volume
+  when: openebs.loopback_volume.create
+  args:
+    creates: /var/local/openebs_volume
+
+- name: Create mount directory
+  ansible.builtin.file:
+    path: /mnt/openebs_volume
+    state: directory
+
+- name: Automount loopback device file
+  ansible.builtin.lineinfile:
+    path: /etc/fstab
+    regexp: '^/var/local/openebs_volume'
+    line: "/var/local/openebs_volume /mnt/openebs_volume auto loop 0 0"
+  when: openebs.loopback_volume.create
 ...
