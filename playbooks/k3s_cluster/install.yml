@@ -24,9 +24,9 @@
   gather_facts: no
   become: no
   roles:
-    - role: openebs_requirements
+    - role: longhorn_requirements
       become: yes
-      when: openebs.enabled
+      when: longhorn.enabled
     - role: reboot_and_reconnect
     - role: k3s/agent
       become: yes
