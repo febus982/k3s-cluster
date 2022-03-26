@@ -1,5 +1,5 @@
 ---
-- name: Install open-iscsi via apt
+- name: Install longhorn apt requirements
   apt:
     pkg:
     - open-iscsi
@@ -19,26 +19,4 @@
 - name: Auto-load iscsi_tcp module on startup
   shell:
     cmd: echo iscsi_tcp > /etc/modules-load.d/iscsi-tcp.conf
-
-- name: Create loopback device file
-  shell:
-    cmd: >
-      fallocate -l {{ longhorn.loopback_volume.size_gb }}G /var/local/longhorn_volume
-      && mkfs -t {{ longhorn.loopback_volume.fs }} /var/local/longhorn_volume
-  when: longhorn.loopback_volume.create
-  args:
-    creates: /var/local/longhorn_volume
-
-- name: Create mount directory
-  ansible.builtin.file:
-    path: /mnt/longhorn_volume
-    state: directory
-  when: longhorn.loopback_volume.create
-
-- name: Automount loopback device file
-  ansible.builtin.lineinfile:
-    path: /etc/fstab
-    regexp: '^/var/local/longhorn_volume'
-    line: "/var/local/longhorn_volume /mnt/longhorn_volume auto loop,noauto 0 0"
-  when: longhorn.loopback_volume.create
 ...
