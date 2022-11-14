@@ -7,7 +7,7 @@ This is a set of Ansible playbooks to setup a set of Raspberry PI machines:
 
 ## Documentation
 
-Full documentation is available [here](https://k3s-clkuster.busetti.io). You can also clone this repository and run:
+Full documentation is available [here](https://k3s-cluster.busetti.io). You can also clone this repository and run:
 
 ```bash
 pipenv install
