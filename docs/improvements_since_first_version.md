@@ -2,7 +2,7 @@
 
 Some improvements have been added to this new version:
 
-* The new Raspbian Bullseye, coupled with the recent Raspberry PI Imager, allows
+* Raspbian Bullseye (or Ubuntu Server), coupled with the recent Raspberry PI Imager, allows
   to set up the Raspberry PI hostname and the locale when flashing the SD Card / Hard Disk,
   giving a huge speed boost to the installation process. _(It's not necessary anymore
   to initialise the PIs one by one to set up the hostname)_
