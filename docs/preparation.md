@@ -21,8 +21,16 @@ For the sake of installing the system the default settings found on Raspberry Pi
     over an SSD
 
 * Download the latest [Raspberry Pi Imager](https://www.raspberrypi.org/software/) version and open it.
-* Choose the OS `Raspberry Pi OS Lite (64-bit)` under `Raspberry Pi OS (other)`, or `Ubuntu Server 22.04.2 LTS (64-bit)`
-  under `Other general-purpose OS`/`Ubuntu`
+* Choose the OS:
+    * **(strongly recommended)** `Ubuntu Server 22.04.2 LTS (64-bit)` under `Other general-purpose OS`/`Ubuntu`
+    * `Raspberry Pi OS Lite (64-bit)` under `Raspberry Pi OS (other)`
+
+???+ warning "Why should you use Ubuntu?"
+    There is an open [issue](https://github.com/raspberrypi/linux/issues/4375) in Raspberry Pi OS
+    for a kernel setting that makes impossible to run Envoy. While the setting makes sense
+    in a generic Raspberry PI context, Envoy is widely used in kubernetes applications.
+    
+    It will be likely you'll encounter this issue. **This is the reason why I recommend using Ubuntu Server**
 
 For each Raspberry PI card 
 
