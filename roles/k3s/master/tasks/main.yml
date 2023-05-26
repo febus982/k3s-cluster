@@ -3,11 +3,13 @@
   ansible.builtin.file:
     path: /etc/rancher/k3s
     state: directory
+  become: yes
 
 - name: Copy K3S config file
   ansible.builtin.template:
     src: "{{ role_path }}/templates/config.yaml.j2"
     dest: /etc/rancher/k3s/config.yaml
+  become: yes
 
 - name: Check if HA mode with integrated datastore
   set_fact:
@@ -32,7 +34,7 @@
     var: cluster_needs_init
 
 - name: Install K3S Master (HA with integrated datastore)
-  shell:
+  ansible.builtin.shell:
     cmd: >
       curl -sfL https://get.k3s.io |
       {{ 'K3S_CLUSTER_INIT=true' if cluster_needs_init else 'K3S_URL=https://' + control_plane_floating_ip + ':6443' }}
@@ -42,7 +44,7 @@
   when: ha_integrated_datastore
 
 - name: Install K3S Master (Single master or HA with external datastore)
-  shell:
+  ansible.builtin.shell:
     cmd: "curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC=server sh -"
     creates: /etc/rancher/k3s/k3s.yaml
   when: not ha_integrated_datastore
@@ -73,7 +75,7 @@
   when: cluster_needs_init
 
 - name: "Replace https://localhost:6443 with https://{{ control_plane_floating_ip }}:6443"
-  command: >-
+  ansible.builtin.command: >-
     k3s kubectl config set-cluster default
       --server=https://{{ control_plane_floating_ip }}:6443
       --kubeconfig /tmp/kubeconfig

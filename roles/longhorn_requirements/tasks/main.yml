@@ -28,6 +28,7 @@
 - name: Load iscsi_tcp module
   shell:
     cmd: modprobe iscsi_tcp
+  become: true
 
 - name: Auto-load iscsi_tcp module on startup
   shell:

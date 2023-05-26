@@ -20,13 +20,10 @@
   serial: 1
   roles:
     - role: k3s/master
-      become: yes
 
 - hosts: node
   gather_facts: yes
   become: no
   roles:
-    - role: reboot_and_reconnect
     - role: k3s/agent
-      become: yes
 ...
