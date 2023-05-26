@@ -6,6 +6,19 @@
     - lvm2
     state: latest
 
+- name: Install longhorn Ubuntu apt requirements
+  apt:
+    pkg:
+    - linux-modules-extra-raspi
+    state: latest
+  when: ansible_distribution == "Ubuntu"
+
+# Need restart to use the newly installed kernel modules
+- name: Reboot machine
+  reboot:
+  become: true
+  when: ansible_distribution == "Ubuntu"
+
 - name: Enable and restart open-iscsi
   ansible.builtin.systemd:
     name: open-iscsi

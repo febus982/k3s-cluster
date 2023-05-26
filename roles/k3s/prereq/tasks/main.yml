@@ -1,19 +1,16 @@
+---
 - name: Fail if master setup is invalid
   fail:
     msg: You can't run an an even number of masters without an external datastore
   when: (groups['master'] | length | int is divisibleby 2) and k3s_datastore_endpoint is not defined
 
-- name: Disable swapfile
-  shell:
-    cmd: dphys-swapfile swapoff && dphys-swapfile uninstall
-  become: yes
+- name: Raspbian requirements
+  include_tasks: raspios.yml
+  when: ansible_distribution == "Debian"
 
-- name: Disable swapfile service
-  ansible.builtin.systemd:
-    name: dphys-swapfile
-    state: stopped
-    enabled: no
-  become: yes
+- name: Ubuntu requirements
+  include_tasks: ubuntu.yml
+  when: ansible_distribution == "Ubuntu"
 
 - name: Disable wpa_supplicant
   ansible.builtin.systemd:
@@ -56,14 +53,6 @@
     reload: yes
   become: yes
 
-- name: Activating cgroup support
-  lineinfile:
-    path: /boot/cmdline.txt
-    regexp: '^((?!.*\bcgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory\b).*)$'
-    line: '\1 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory'
-    backrefs: true
-  become: yes
-
 - name: Make sure iptables is installed
   apt:
     pkg:
@@ -93,3 +82,4 @@
 - name: Reboot machine
   reboot:
   become: true
+...
