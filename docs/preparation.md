@@ -21,14 +21,15 @@ For the sake of installing the system the default settings found on Raspberry Pi
     over an SSD
 
 * Download the latest [Raspberry Pi Imager](https://www.raspberrypi.org/software/) version and open it.
-* Choose the OS `Raspberry Pi OS Lite (64-bit)` under `Raspberry Pi OS (other)`
+* Choose the OS `Raspberry Pi OS Lite (64-bit)` under `Raspberry Pi OS (other)`, or `Ubuntu Server 22.04.2 LTS (64-bit)`
+  under `Other general-purpose OS`/`Ubuntu`
 
 For each Raspberry PI card 
 
 * Customise the installation process by clicking the cog-shaped button:
     * Setup the hostname, e.g. `master1`, `node1`, etc.  _(This is very important so that the ansible playbook can target via the hostname)_
     * Enable SSH with public-key authentication _(Your SSH key is already precompiled!)_
-    * Set a password for the `pi` user
+    * Set a password for the `pi` user (or any username you want to use)
     * Set the locale
 * Optional: modify the `config.txt` file in the sd card and customise the PI config (e.g. Disable the wifi and bluetooth adapter)
 

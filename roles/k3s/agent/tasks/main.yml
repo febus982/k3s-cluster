@@ -3,14 +3,16 @@
   ansible.builtin.file:
     path: /etc/rancher/k3s
     state: directory
+  become: yes
 
 - name: Copy K3S config file
   ansible.builtin.template:
     src: "{{ role_path }}/templates/config.yaml.j2"
     dest: /etc/rancher/k3s/config.yaml
+  become: yes
 
 - name: Install K3S Agent
-  shell:
+  ansible.builtin.shell:
     cmd: curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC=agent sh -
     creates: /usr/local/bin/k3s-agent-uninstall.sh
 ...

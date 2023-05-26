@@ -3,7 +3,7 @@
 ???+ error "Legacy documentation"
     This the legacy documentation. [Click here for the updated one](/)
 
-This requires the Load Balancer PIs to be installed and running. Refer to [Load balancers setup](legacy/load_balancers.md).
+This requires the Load Balancer PIs to be installed and running. Refer to [Load balancers setup](load_balancers.md).
 
 ## PI Network setup
 

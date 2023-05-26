@@ -1,15 +1,13 @@
 ---
-- name: Install ntp
+- name: Install ntp packages
   apt:
     pkg:
-    - ntp
+    - systemd-timesyncd
     state: latest
   become: yes
 
-- name: Enable and restart ntp
-  ansible.builtin.systemd:
-    name: ntp
-    state: restarted
-    enabled: yes
+- name: Enable ntp synchronization
+  ansible.builtin.shell:
+    cmd: timedatectl set-ntp true
   become: yes
 ...
