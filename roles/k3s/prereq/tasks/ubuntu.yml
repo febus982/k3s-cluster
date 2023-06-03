@@ -6,4 +6,20 @@
     regexp: '^((?!.*\bcgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory\b).*)$'
     line: '\1 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory'
   become: yes
+
+- name: "Auto-load IPVS modules ({{ item }}) on startup"
+  shell:
+    cmd: "echo {{ item }} > /etc/modules-load.d/{{ item }}.conf"
+  become: yes
+  loop:
+    - ip_vs
+    - ip_vs_rr
+    - ip_vs_wrr
+    - ip_vs_lc
+    - ip_vs_wlc
+    - ip_vs_dh
+    - ip_vs_sh
+    - ip_vs_sed
+    - ip_vs_nq
+    - nf_conntrack
 ...
